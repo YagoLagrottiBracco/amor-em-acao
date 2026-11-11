@@ -31,15 +31,15 @@ export default async function BlogIndexPage({
 
   const breadcrumbSchema = getBreadcrumbJsonLd([
     { name: "Início", path: "/" },
-    { name: "Blog", path: "/blog" },
+    { name: "Notícias", path: "/blog" },
   ]);
 
   const collectionSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Blog Amor em Ação — Projetos, Voluntariado e Transparência",
+    name: "Notícias Amor em Ação — Projetos, Voluntariado e Transparência",
     description:
-      "Publicações institucionais e educativas da Associação Humanitária Amor em Ação.",
+      "Publicações institucionais, notícias e registros históricos da Associação Humanitária Amor em Ação.",
     url: `${SITE_CONFIG.url}/blog`,
     inLanguage: "pt-BR",
     mainEntity: {
@@ -74,11 +74,10 @@ export default async function BlogIndexPage({
             Informação, Memória e Cidadania
           </p>
           <h1 className="display text-4xl md:text-5xl font-extrabold mt-3">
-            Blog Amor em Ação
+            Notícias & Publicações
           </h1>
           <p className="text-stone-300 text-lg max-w-2xl mx-auto mt-5">
-            Conheça nossas iniciativas, registros históricos, orientações para
-            voluntários e práticas de transparência em artigos completos.
+            Acompanhe nossas últimas ações, conquistas da comunidade, registros de campo e histórias que transformam vidas.
           </p>
         </div>
       </div>

@@ -171,7 +171,7 @@ export function Header() {
                 isActive("/blog") ? "active" : ""
               }`}
             >
-              Blog
+              Notícias
             </Link>
 
             <Link
@@ -273,7 +273,7 @@ export function Header() {
             onClick={() => setMobileMenuOpen(false)}
             className="mobile-link"
           >
-            Blog
+            Notícias
           </Link>
           <Link
             href="/contato"
