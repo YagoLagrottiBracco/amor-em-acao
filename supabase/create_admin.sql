@@ -10,8 +10,10 @@
 --      target_password := 'AmorEmAcao@2026Admin!';
 -- 4. Clique em "Run" (ou pressione Ctrl+Enter / Cmd+Enter).
 --
--- Observação: Este script é idempotente. Se o usuário já existir, a senha
--- será atualizada e o e-mail será marcado como confirmado automaticamente.
+-- Dica Alternativa (via Interface Gráfica do Supabase):
+-- Você também pode criar o usuário com facilidade pelo painel do Supabase:
+-- Acesse "Authentication" -> "Users" -> "Add User" -> "Create User",
+-- preencha o e-mail e a senha e marque a opção "Auto Confirm User".
 -- ============================================================================
 
 create extension if not exists "pgcrypto";
@@ -22,6 +24,7 @@ declare
   target_password text := 'AmorEmAcao@2026Admin!';
   target_user_id uuid;
   encrypted_pass text;
+  id_data_type text;
   has_provider_id boolean;
 begin
   -- Gera o hash bcrypt da senha fornecida
@@ -67,18 +70,33 @@ begin
       ''
     );
 
-    -- Verifica se a coluna provider_id existe na tabela auth.identities
+    -- Detecta o tipo da coluna 'id' em auth.identities (uuid vs text)
+    select coalesce(data_type, 'uuid') into id_data_type
+    from information_schema.columns
+    where table_schema = 'auth' and table_name = 'identities' and column_name = 'id';
+
+    -- Verifica se a coluna 'provider_id' existe na tabela auth.identities
     select exists (
       select 1 from information_schema.columns
       where table_schema = 'auth' and table_name = 'identities' and column_name = 'provider_id'
     ) into has_provider_id;
 
     if has_provider_id then
-      execute 'insert into auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at) values ($1, $2, $3, $4, $5, now(), now(), now()) on conflict do nothing'
-      using target_user_id::text, target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email', target_user_id::text;
+      if id_data_type = 'uuid' then
+        execute 'insert into auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at) values (gen_random_uuid(), $1, $2, $3, $4, now(), now(), now()) on conflict do nothing'
+        using target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email', target_user_id::text;
+      else
+        execute 'insert into auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at) values ($1, $2, $3, $4, $5, now(), now(), now()) on conflict do nothing'
+        using target_user_id::text, target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email', target_user_id::text;
+      end if;
     else
-      execute 'insert into auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) values ($1, $2, $3, $4, now(), now(), now()) on conflict do nothing'
-      using target_user_id::text, target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email';
+      if id_data_type = 'uuid' then
+        execute 'insert into auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) values (gen_random_uuid(), $1, $2, $3, now(), now(), now()) on conflict do nothing'
+        using target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email';
+      else
+        execute 'insert into auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) values ($1, $2, $3, $4, now(), now(), now()) on conflict do nothing'
+        using target_user_id::text, target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email';
+      end if;
     end if;
 
     raise notice 'Sucesso: Usuário admin criado com sucesso para o e-mail: % (ID: %)', target_email, target_user_id;
@@ -93,7 +111,12 @@ begin
       updated_at = now()
     where id = target_user_id;
 
-    -- Sincroniza a identidade em auth.identities
+    -- Detecta o tipo da coluna 'id' em auth.identities (uuid vs text)
+    select coalesce(data_type, 'uuid') into id_data_type
+    from information_schema.columns
+    where table_schema = 'auth' and table_name = 'identities' and column_name = 'id';
+
+    -- Verifica se a coluna 'provider_id' existe na tabela auth.identities
     select exists (
       select 1 from information_schema.columns
       where table_schema = 'auth' and table_name = 'identities' and column_name = 'provider_id'
@@ -101,11 +124,21 @@ begin
 
     if not exists (select 1 from auth.identities where user_id = target_user_id and provider = 'email') then
       if has_provider_id then
-        execute 'insert into auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at) values ($1, $2, $3, $4, $5, now(), now(), now()) on conflict do nothing'
-        using target_user_id::text, target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email', target_user_id::text;
+        if id_data_type = 'uuid' then
+          execute 'insert into auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at) values (gen_random_uuid(), $1, $2, $3, $4, now(), now(), now()) on conflict do nothing'
+          using target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email', target_user_id::text;
+        else
+          execute 'insert into auth.identities (id, user_id, identity_data, provider, provider_id, last_sign_in_at, created_at, updated_at) values ($1, $2, $3, $4, $5, now(), now(), now()) on conflict do nothing'
+          using target_user_id::text, target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email', target_user_id::text;
+        end if;
       else
-        execute 'insert into auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) values ($1, $2, $3, $4, now(), now(), now()) on conflict do nothing'
-        using target_user_id::text, target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email';
+        if id_data_type = 'uuid' then
+          execute 'insert into auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) values (gen_random_uuid(), $1, $2, $3, now(), now(), now()) on conflict do nothing'
+          using target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email';
+        else
+          execute 'insert into auth.identities (id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at) values ($1, $2, $3, $4, now(), now(), now()) on conflict do nothing'
+          using target_user_id::text, target_user_id, json_build_object('sub', target_user_id::text, 'email', target_email)::jsonb, 'email';
+        end if;
       end if;
     else
       update auth.identities
