@@ -161,7 +161,7 @@ gh pr edit <numero_do_pr> --body "## 🚀 Changelog Completo da Versão..."
 
 ### 4. Autenticação Administrativa (`/admin`)
 - Protegida por cookie de sessão seguro (`HttpOnly`, HMAC-SHA256).
-- Autentica via **Supabase Auth** (`supabase.auth.signInWithPassword`) ou variáveis de ambiente `ADMIN_EMAIL` e `ADMIN_PASSWORD`.
+- Autentica exclusivamente via **Supabase Auth** (`supabase.auth.signInWithPassword`), provisionado via `supabase/create_admin.sql` ou Supabase Dashboard (`Authentication -> Users`).
 
 ---
 
