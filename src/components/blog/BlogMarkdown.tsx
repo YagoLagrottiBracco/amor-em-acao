@@ -5,8 +5,6 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 
 import { remarkBlogHeadingIds } from "@/lib/blog-outline";
-import { remarkBlogBlockAnchors } from "@/lib/blog-block-anchors";
-import { BlogBlockLink } from "@/components/blog/BlogBlockLink";
 import { safeBlogUrl } from "@/lib/blog-markdown-url";
 import { BlogCopyCode } from "@/components/blog/BlogCopyCode";
 
@@ -38,13 +36,13 @@ export function BlogMarkdown({
   assetPreviews?: Record<string, string>;
   pageUrl?: string;
 }) {
+  void pageUrl;
   return (
     <div className="blog-prose max-w-none break-words text-stone-800">
       <ReactMarkdown
         remarkPlugins={[
           remarkGfm,
           remarkBlogHeadingIds,
-          remarkBlogBlockAnchors,
         ]}
         rehypePlugins={[
           [rehypeHighlight, { detect: false, plainText: ["txt", "text"] }],
@@ -73,37 +71,29 @@ export function BlogMarkdown({
               node?.children.length === 1
                 ? (node.children[0] as HastChild)
                 : null;
-            const id =
-              typeof node?.properties?.id === "string"
-                ? node.properties.id
-                : undefined;
             if (only?.type === "element" && only.tagName === "img") {
               const caption =
                 typeof only.properties?.title === "string"
                   ? only.properties.title
                   : "";
               return (
-                <figure id={id} className="my-8 scroll-mt-28">
+                <figure className="my-8">
                   <div>{children}</div>
                   {caption && (
                     <figcaption className="mt-2.5 text-center text-xs font-medium text-stone-500">
                       {caption}
                     </figcaption>
                   )}
-                  {pageUrl && id && <BlogBlockLink id={id} pageUrl={pageUrl} />}
                 </figure>
               );
             }
             return (
-              <div className="group">
-                <p
-                  className="my-5 scroll-mt-28 text-[1.0625rem] leading-8 text-stone-700"
-                  {...props}
-                >
-                  {children}
-                </p>
-                {pageUrl && id && <BlogBlockLink id={id} pageUrl={pageUrl} />}
-              </div>
+              <p
+                className="my-5 text-[1.0625rem] leading-8 text-stone-700"
+                {...props}
+              >
+                {children}
+              </p>
             );
           },
           a: (props) => {
@@ -185,22 +175,15 @@ export function BlogMarkdown({
             );
             const className = String(code?.properties?.className ?? "");
             const language = className.match(/language-([\w-]+)/)?.[1];
-            const id =
-              typeof code?.properties?.id === "string"
-                ? code.properties.id
-                : undefined;
             return (
-              <div>
-                <div className="my-8 min-w-0 overflow-hidden rounded-2xl border border-stone-200 bg-stone-900 text-stone-100">
-                  <div className="flex items-center justify-between border-b border-stone-800 bg-stone-950/60 px-4 py-2 text-xs text-stone-400">
-                    <span className="font-mono uppercase">{language ?? "texto"}</span>
-                    <BlogCopyCode code={raw} />
-                  </div>
-                  <pre className="overflow-x-auto p-4 text-sm leading-6">
-                    {children}
-                  </pre>
+              <div className="my-8 min-w-0 overflow-hidden rounded-2xl border border-stone-200 bg-stone-900 text-stone-100">
+                <div className="flex items-center justify-between border-b border-stone-800 bg-stone-950/60 px-4 py-2 text-xs text-stone-400">
+                  <span className="font-mono uppercase">{language ?? "texto"}</span>
+                  <BlogCopyCode code={raw} />
                 </div>
-                {pageUrl && id && <BlogBlockLink id={id} pageUrl={pageUrl} />}
+                <pre className="overflow-x-auto p-4 text-sm leading-6">
+                  {children}
+                </pre>
               </div>
             );
           },
