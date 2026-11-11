@@ -9,8 +9,9 @@
 
 Portal institucional completo, sistema de gestão de missões comunitárias com construtor visual de blocos modulares, portal da transparência, blog oficial com editor WYSIWYG de alta qualidade editorial, doações via Stripe e inscrições de voluntários para a **Associação Humanitária Amor em Ação** (Jardim Gramacho · Duque de Caxias/RJ).
 
-- **URL de Produção:** [https://amoremacao.lagrotti.dev](https://amoremacao.lagrotti.dev)
-- **Painel Administrativo:** [https://amoremacao.lagrotti.dev/admin](https://amoremacao.lagrotti.dev/admin)
+- **URL Oficial de Produção:** [https://amoremacao.org/](https://amoremacao.org/)
+- **URL de Preview / Staging:** [https://amoremacao.lagrotti.dev](https://amoremacao.lagrotti.dev)
+- **Painel Administrativo:** [https://amoremacao.org/admin](https://amoremacao.org/admin) (Produção) / [https://amoremacao.lagrotti.dev/admin](https://amoremacao.lagrotti.dev/admin) (Preview)
 
 ---
 
@@ -121,7 +122,7 @@ npm install
 Crie o arquivo `.env.local` na raiz com base no [`.env.example`](./.env.example):
 
 ```env
-NEXT_PUBLIC_SITE_URL=https://amoremacao.lagrotti.dev
+NEXT_PUBLIC_SITE_URL=https://amoremacao.org
 
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_anon_key

@@ -9,8 +9,8 @@ Este documento define as regras arquiteturais, o padrão de commits e o **fluxo 
 O projeto adota estritamente o **Git Flow** aliado à especificação [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/).
 
 ### Estrutura de Branches:
-1. **`release`**: Branch de produção e lançamentos estáveis. Conectada aos deploys de produção da Vercel (`https://amoremacao.lagrotti.dev`).
-2. **`develop`**: Branch principal de desenvolvimento e integração contínua (staging).
+1. **`release`**: Branch de produção e lançamentos estáveis. Conectada aos deploys de produção da Vercel (`https://amoremacao.org`).
+2. **`develop`**: Branch principal de desenvolvimento e integração contínua (staging). Conectada aos deploys de preview/staging da Vercel (`https://amoremacao.lagrotti.dev`).
 3. **`feature/*`**, **`fix/*`**, **`refactor/*`**, **`chore/*`**: Branches de trabalho criadas para cada tarefa individual a partir de `develop`.
 
 ---
@@ -94,7 +94,8 @@ gh pr create --base release --head develop \
 - **Organização:** Associação Humanitária Amor em Ação
 - **CNPJ Oficial:** `21.960.082/0001-96`
 - **Sede:** Rua Tocantins, nº 30 — Jardim Gramacho, Duque de Caxias/RJ
-- **Domínio Oficial de Produção:** [https://amoremacao.lagrotti.dev](https://amoremacao.lagrotti.dev)
+- **Domínio Oficial de Produção:** [https://amoremacao.org/](https://amoremacao.org/)
+- **Domínio de Preview / Staging:** [https://amoremacao.lagrotti.dev](https://amoremacao.lagrotti.dev)
 - **Créditos do Desenvolvedor (Permanente em Metadados e Rodapé):**  
   **Yago Lagrotti Bracco** ([https://lagrotti.dev](https://lagrotti.dev))  
   *Esta menção de crédito é um requisito permanente do projeto e NÃO deve ser alterada ou removida.*
@@ -107,7 +108,7 @@ gh pr create --base release --head develop \
 - **Estilização:** Tailwind CSS v4 + FontAwesome 6 + Google Fonts (`DM Sans` e `Manrope`)
 - **Banco de Dados & Storage:** Supabase (PostgreSQL + RLS + Storage)
 - **Meios de Pagamento:** Stripe Checkout (sem webhooks complexos)
-- **Editor WYSIWYG de Blog:** `@milkdown/crepe` (mesmo padrão editorial do portfólio do desenvolvedor)
+- **Editor WYSIWYG de Blog:** `@milkdown/crepe`
 - **SEO & Dados Estruturados:** Schema.org JSON-LD (`NGO`, `WebSite`, `Article`, `ItemList`, `BreadcrumbList`)
 
 ---
