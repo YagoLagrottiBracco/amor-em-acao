@@ -1059,10 +1059,9 @@ export function AdminDashboardClient({
               <i className="fa-solid fa-key text-orange-600 mr-1.5" />
               Autenticação Segura:
             </strong>
-            Você pode entrar usando um usuário criado no{" "}
-            <strong>Supabase Auth</strong> (Authentication &rarr; Users) ou as
-            variáveis <code>ADMIN_EMAIL</code> e <code>ADMIN_PASSWORD</code>{" "}
-            configuradas na Vercel.
+            Entre com as credenciais cadastradas no{" "}
+            <strong>Supabase Auth</strong> (Authentication &rarr; Users ou via
+            script SQL <code>supabase/create_admin.sql</code>).
           </div>
 
           <div className="text-center pt-1">

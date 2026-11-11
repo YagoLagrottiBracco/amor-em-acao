@@ -9,8 +9,6 @@ function getSigningSecret(): string {
   return (
     process.env.ADMIN_SESSION_SECRET ||
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.ADMIN_PASSWORD ||
-    process.env.ADMIN_API_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     "amor-em-acao-fallback-signing-key-2026"
   );
@@ -74,26 +72,12 @@ export function getAdminSessionFromRequest(
   request: NextRequest
 ): AdminSessionPayload | null {
   const cookieToken = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
-  const session = verifySessionToken(cookieToken);
-  if (session) return session;
-
-  // Additional header key support for script-based access
-  const expectedKey = process.env.ADMIN_PASSWORD || process.env.ADMIN_API_KEY;
-  const headerKey = request.headers.get("x-admin-key");
-  if (expectedKey && headerKey && headerKey === expectedKey) {
-    return {
-      email: process.env.ADMIN_EMAIL || "admin@amoremacao.org.br",
-      exp: Date.now() + 60000,
-    };
-  }
-
-  return null;
+  return verifySessionToken(cookieToken);
 }
 
 /**
- * Validates admin credentials:
- * 1) Checks against ADMIN_EMAIL + ADMIN_PASSWORD (or ADMIN_API_KEY) in environment variables;
- * 2) Alternatively, authenticates against Supabase Auth (`signInWithPassword`).
+ * Validates admin credentials exclusively against Supabase Auth (`signInWithPassword`).
+ * Administrators are provisioned directly in Supabase (Authentication -> Users or supabase/create_admin.sql).
  */
 export async function authenticateAdminCredentials(
   email: string,
@@ -106,51 +90,45 @@ export async function authenticateAdminCredentials(
     return { ok: false, error: "Informe seu e-mail e sua senha." };
   }
 
-  const envPassword =
-    process.env.ADMIN_PASSWORD?.trim() || process.env.ADMIN_API_KEY?.trim();
-  const envEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-
-  // 1. Check credentials configured via environment variables
-  if (envPassword) {
-    const emailMatches = !envEmail || envEmail === cleanEmail;
-    if (emailMatches && cleanPass === envPassword) {
-      return { ok: true, email: cleanEmail };
-    }
-  }
-
-  // 2. Check authentication via Supabase Auth (user created in Authentication -> Users in Supabase)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const supabaseKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ||
     process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
 
-  if (supabaseUrl && supabaseKey) {
-    try {
-      const authClient = createClient(supabaseUrl, supabaseKey, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      });
-      const { data, error } = await authClient.auth.signInWithPassword({
-        email: cleanEmail,
-        password: cleanPass,
-      });
-      if (!error && data?.user?.email) {
-        return { ok: true, email: data.user.email };
-      }
-    } catch {
-      // Fallthrough to standard error message
-    }
-  }
-
-  if (!envPassword && (!supabaseUrl || !supabaseKey)) {
+  if (!supabaseUrl || !supabaseKey) {
     return {
       ok: false,
       error:
-        "Configure um usuário no Supabase Auth (Authentication > Users) ou defina ADMIN_EMAIL e ADMIN_PASSWORD nas variáveis de ambiente da Vercel.",
+        "Supabase não configurado. Verifique as chaves NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_ANON_KEY.",
     };
   }
 
-  return {
-    ok: false,
-    error: "E-mail ou senha inválidos. Verifique suas credenciais de administrador.",
-  };
+  try {
+    const authClient = createClient(supabaseUrl, supabaseKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data, error } = await authClient.auth.signInWithPassword({
+      email: cleanEmail,
+      password: cleanPass,
+    });
+
+    if (error || !data?.user?.email) {
+      return {
+        ok: false,
+        error:
+          "E-mail ou senha inválidos. Verifique as credenciais cadastradas no Supabase Auth.",
+      };
+    }
+
+    return { ok: true, email: data.user.email };
+  } catch (err) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Erro ao autenticar no Supabase Auth.";
+    return {
+      ok: false,
+      error: message,
+    };
+  }
 }
