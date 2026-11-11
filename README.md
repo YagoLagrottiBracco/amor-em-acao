@@ -125,9 +125,11 @@ Crie o arquivo `.env.local` na raiz com base no [`.env.example`](./.env.example)
 ```env
 NEXT_PUBLIC_SITE_URL=https://amoremacao.org
 
+# Supabase (suporta tanto as novas Publishable/Secret Keys quanto as legadas Anon/Service Role)
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_anon_key
-SUPABASE_SERVICE_ROLE_KEY=sua_service_role_key
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+SUPABASE_SECRET_KEY=sb_secret_...
+# (Ou caso utilize as chaves legadas: NEXT_PUBLIC_SUPABASE_ANON_KEY e SUPABASE_SERVICE_ROLE_KEY)
 
 ADMIN_SESSION_SECRET=segredo_hmac_longo_para_assinatura_de_cookies
 
