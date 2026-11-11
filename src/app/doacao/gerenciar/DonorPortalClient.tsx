@@ -99,6 +99,7 @@ export function DonorPortalClient() {
               Seu e-mail cadastrado na doação
             </label>
             <div className="relative">
+              <i className="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none text-base" />
               <input
                 id="donor-portal-email"
                 type="email"
@@ -106,9 +107,9 @@ export function DonorPortalClient() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="exemplo@email.com"
-                className="form-field text-base pl-11"
+                className="form-field text-base !pl-12"
+                style={{ paddingLeft: "3rem" }}
               />
-              <i className="fa-regular fa-envelope absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" />
             </div>
 
             {errorMsg && (

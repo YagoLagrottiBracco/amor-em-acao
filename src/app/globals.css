@@ -150,19 +150,21 @@ body {
   color: #c2410c;
 }
 
-.form-field {
-  width: 100%;
-  border: 1px solid #e7ddd4;
-  border-radius: 12px;
-  padding: 12px 14px;
-  background: #fff;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
+@layer components {
+  .form-field {
+    width: 100%;
+    border: 1px solid #e7ddd4;
+    border-radius: 12px;
+    padding: 12px 14px;
+    background: #fff;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
 
-.form-field:focus {
-  border-color: #f58220;
-  box-shadow: 0 0 0 3px rgba(245, 130, 32, 0.14);
+  .form-field:focus {
+    border-color: #f58220;
+    box-shadow: 0 0 0 3px rgba(245, 130, 32, 0.14);
+  }
 }
 
 /* Editorial typography styles for Blog articles (SEO Readability) */

@@ -40,14 +40,15 @@ export function BlogCatalogClient({
       {/* Barra de busca e filtro por categoria */}
       <div className="soft-card p-5 md:p-6 mb-10 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
         <div className="relative flex-grow max-w-xl">
-          <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" />
+          <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" />
           <input
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por tema, região, palavra-chave..."
             aria-label="Buscar artigos no blog"
-            className="form-field pl-11"
+            className="form-field text-sm !pl-11"
+            style={{ paddingLeft: "2.75rem" }}
           />
         </div>
 
