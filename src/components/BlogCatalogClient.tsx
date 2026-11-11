@@ -107,22 +107,6 @@ export function BlogCatalogClient({
           ))}
         </div>
       )}
-
-      {/* Barra discreta para o administrador */}
-      <div className="mt-14 pt-8 border-t border-orange-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
-        <p>
-          Todos os artigos são estruturados com dados semânticos Schema.org (
-          <code>BlogPosting</code> e <code>FAQPage</code>) para indexação no
-          Google.
-        </p>
-        <Link
-          href="/admin/blog"
-          className="inline-flex items-center gap-2 bg-white border border-orange-200 text-orange-800 font-extrabold px-4 py-2.5 rounded-xl hover:bg-orange-50 transition shrink-0"
-        >
-          <i className="fa-solid fa-pen-to-square" />
-          Painel Admin: Criar / Editar Cards e Artigos
-        </Link>
-      </div>
     </div>
   );
 }
