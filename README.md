@@ -53,8 +53,9 @@ Portal institucional completo, sistema de gestão de missões comunitárias com 
   - Modo leitura focado e âncoras permanentes por parágrafo.
 - **Zero "Mock Lixo":** Todos os dados operam de forma 100% dinâmica via Supabase.
 
-### 4. Doações (Stripe Checkout & Registro Direto)
-- Doações pontuais e mensais recorrentes integradas com Stripe.
+### 4. Doações (Stripe Checkout & Portal de Autonomia do Doador)
+- Doações pontuais (únicas) e mensais recorrentes integradas com Stripe.
+- **Portal de Autonomia do Doador (`/doacao/gerenciar`)**: Integração com o **Stripe Customer Portal** permitindo que doadores recorrentes gerenciem sua própria assinatura mensal (atualizar cartão de crédito, baixar recibos/faturas ou cancelar a qualquer momento sem burocracia).
 - **Sem necessidade de webhooks complexos:** status do pagamento consultado e gravado automaticamente no retorno para `/doacao/sucesso` ou via botão **"Verificar no Stripe"** no painel administrativo.
 - Registro manual de doações recebidas via Pix ou transferência bancária.
 

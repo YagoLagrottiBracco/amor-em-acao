@@ -163,6 +163,10 @@ gh pr edit <numero_do_pr> --body "## 🚀 Changelog Completo da Versão..."
 - Protegida por cookie de sessão seguro (`HttpOnly`, HMAC-SHA256).
 - Autentica exclusivamente via **Supabase Auth** (`supabase.auth.signInWithPassword`), provisionado via `supabase/create_admin.sql` ou Supabase Dashboard (`Authentication -> Users`).
 
+### 5. Doações Pontuais & Recorrentes (Stripe Customer Portal)
+- Suporta doação avulsa (`mode: 'payment'`) e doação mensal recorrente (`mode: 'subscription'`).
+- Rota de autoatendimento para o doador: `/doacao/gerenciar` conectada à API `/api/stripe/portal` (Stripe Customer Portal) para gerenciamento autônomo de cartão, download de faturas/recibos e cancelamento a qualquer momento.
+
 ---
 
 ## 🛠️ Comandos de Verificação
