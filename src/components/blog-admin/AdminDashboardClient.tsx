@@ -1089,18 +1089,6 @@ export function AdminDashboardClient({
                   <i className="fa-solid fa-shield-halved" /> Painel
                   Administrativo
                 </span>
-                <span
-                  className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
-                    isSupabaseConnected
-                      ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/30"
-                      : "bg-amber-500/20 text-amber-200 border border-amber-400/30"
-                  }`}
-                >
-                  <i className="fa-solid fa-database" />
-                  {isSupabaseConnected
-                    ? "Supabase Conectado"
-                    : "Modo Local (Configure NEXT_PUBLIC_SUPABASE_URL para persistir na nuvem)"}
-                </span>
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/15 px-3 py-1 text-xs font-bold text-stone-200">
                   <i className="fa-solid fa-user-check text-emerald-400" />
                   {adminEmail}
