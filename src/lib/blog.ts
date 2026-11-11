@@ -1,5 +1,6 @@
 import { getSupabaseAdmin } from "@/lib/supabase";
 import { PROJECT_IMAGES, type BlogPost, type BlogFaqItem } from "@/lib/blog-types";
+import { INITIAL_BLOG_POSTS } from "@/lib/blog-initial-posts";
 
 export { PROJECT_IMAGES, type BlogPost, type BlogFaqItem };
 
@@ -29,8 +30,8 @@ interface SupabaseBlogRow {
   updated_at: string;
 }
 
-// Fallback em memória apenas para quando variáveis do Supabase ainda não estiverem preenchidas
-let memoryPosts: BlogPost[] = [];
+// In-memory collection seeded from official archive
+let memoryPosts: BlogPost[] = [...INITIAL_BLOG_POSTS];
 
 function rowToPost(row: SupabaseBlogRow): BlogPost {
   return {
@@ -106,14 +107,14 @@ export async function getAllBlogPostsAsync(options?: {
         query = query.eq("draft", false);
       }
       const { data, error } = await query;
-      if (!error && Array.isArray(data)) {
+      if (!error && Array.isArray(data) && data.length > 0) {
         return {
           posts: sortPostsByDate((data as SupabaseBlogRow[]).map(rowToPost)),
           storage: "supabase",
         };
       }
     } catch {
-      // Fallback caso a tabela ainda não tenha sido criada
+      // Fallback if table does not exist yet
     }
   }
 
@@ -145,7 +146,7 @@ export async function getBlogPostBySlugAsync(
         return rowToPost(data as SupabaseBlogRow);
       }
     } catch {
-      // Fallback em memória
+      // Fallback to in-memory store
     }
   }
   return memoryPosts.find((p) => p.slug === slug);

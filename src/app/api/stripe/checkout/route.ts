@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
       cancel_url: `${origin}/doacao/cancelada`,
     });
 
-    // Registra a doação diretamente no Supabase (sem necessidade de webhook)
+    // Record donation directly in Supabase (no webhooks required)
     await createDonationRecord({
       stripeSessionId: session.id,
       donorName: donorName || null,
@@ -100,7 +100,10 @@ export async function POST(request: NextRequest) {
       project: projectKey,
       status: "pending",
       paymentMethod: "stripe",
-      notes: `Checkout Stripe iniciado (${projectName})`,
+      notes:
+        frequency === "subscription"
+          ? `Doação mensal recorrente iniciada via Stripe (${projectName})`
+          : `Doação única iniciada via Stripe (${projectName})`,
     });
 
     return NextResponse.json({ id: session.id, url: session.url });

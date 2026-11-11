@@ -61,7 +61,7 @@ export function Footer() {
                   href="/blog"
                   className="hover:text-orange-300 transition"
                 >
-                  Blog e Artigos
+                  Notícias e Artigos
                 </Link>
               </li>
             </ul>
@@ -100,6 +100,15 @@ export function Footer() {
                   className="hover:text-orange-300 transition"
                 >
                   Contato
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/doacao/gerenciar"
+                  className="hover:text-orange-300 transition text-stone-400 text-xs inline-flex items-center gap-1.5"
+                >
+                  <i className="fa-solid fa-sliders text-orange-400/80" />
+                  Gerenciar doação recorrente
                 </Link>
               </li>
               <li>

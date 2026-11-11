@@ -51,7 +51,7 @@ export async function listVolunteers(): Promise<{
         };
       }
     } catch {
-      // Fallback caso a tabela ainda não tenha sido criada
+      // Fallback if table does not exist yet
     }
   }
 

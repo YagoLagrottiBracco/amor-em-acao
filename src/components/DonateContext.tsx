@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
+import Link from "next/link";
 
 interface DonateContextValue {
   openDonateModal: (initialAmount?: number, initialProject?: string) => void;
@@ -230,6 +231,16 @@ export function DonateProvider({ children }: { children: React.ReactNode }) {
                 </button>
               </div>
 
+              {frequency === "subscription" && (
+                <div className="flex items-center gap-2 p-2.5 bg-orange-50/90 border border-orange-200 rounded-xl text-[11px] text-orange-950 font-medium">
+                  <i className="fa-solid fa-repeat text-orange-600 shrink-0" />
+                  <span>
+                    Contribuição mensal recorrente. Você terá total liberdade
+                    para atualizar o cartão ou cancelar a qualquer momento.
+                  </span>
+                </div>
+              )}
+
               {/* Valores Rápidos */}
               <div>
                 <label className="block text-xs font-extrabold uppercase tracking-wider text-stone-500 mb-2">
@@ -368,6 +379,17 @@ export function DonateProvider({ children }: { children: React.ReactNode }) {
                 <b>Stripe</b>. Para doações diretas ou confirmação de dados
                 bancários oficiais, consulte o perfil público da associação.
               </p>
+            </div>
+
+            <div className="mt-3 text-center">
+              <Link
+                href="/doacao/gerenciar"
+                onClick={closeDonateModal}
+                className="text-[11px] font-bold text-stone-500 hover:text-orange-700 transition inline-flex items-center gap-1.5"
+              >
+                <i className="fa-solid fa-sliders text-stone-400" />
+                Já é um doador mensal? Gerenciar minha doação recorrente
+              </Link>
             </div>
 
             <div className="mt-4 flex gap-2">

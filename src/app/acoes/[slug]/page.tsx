@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { buildMetadata, getBreadcrumbJsonLd } from "@/lib/seo";
+import {
+  buildMetadata,
+  getBreadcrumbJsonLd,
+  getSocialProjectJsonLd,
+} from "@/lib/seo";
 import {
   getActionBySlugAsync,
   getAllActionsAsync,
@@ -66,11 +70,22 @@ export default async function ActionDetailPage({
     { name: action.title, path: `/acoes/${action.slug}` },
   ]);
 
+  const projectSchema = getSocialProjectJsonLd({
+    title: action.title,
+    description: action.seoDescription || action.description || action.navSubtitle,
+    slug: action.slug,
+    coverImage: action.coverImage,
+  });
+
   return (
     <article className="min-h-screen bg-[#fffaf5] pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(projectSchema) }}
       />
 
       <ActionBlockRenderer blocks={action.blocks} />

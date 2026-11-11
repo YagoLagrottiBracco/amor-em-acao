@@ -22,12 +22,12 @@ O projeto adota estritamente o **Git Flow** aliado à especificação [Conventio
 > Siga rigorosamente os 7 passos abaixo ao receber qualquer instrução:
 
 ### 1. Início da Tarefa — Atualizar e Criar Branch
-Antes de alterar qualquer código, garanta que a branch `develop` está limpa e sincronizada, e crie a branch de trabalho:
+Antes de alterar qualquer código, garanta que a branch `develop` está limpa e sincronizada, e crie a branch de trabalho com nomenclatura em **inglês**:
 ```bash
 git checkout develop
 git pull origin develop
-git checkout -b feature/nome-da-funcionalidade
-# ou fix/nome-da-correcao, refactor/nome-do-modulo, chore/nome-da-manutencao, etc.
+git checkout -b feature/mission-testimonials-block
+# ou fix/header-dropdown-mobile, refactor/auth-session, chore/deps-update, etc.
 ```
 
 ### 2. Commits Frequentes no Decorrer de Ações Críticas
@@ -38,12 +38,24 @@ git checkout -b feature/nome-da-funcionalidade
 npm run build
 ```
 
-### 3. Padrão Conventional Commits v1.0.0
-Todos os commits DEVEM seguir o padrão:
-```
-<tipo>[escopo opcional]: <descrição curta no imperativo>
+### 3. Padrão Conventional Commits v1.0.0 & Idioma no Código (Inglês Obrigatório)
 
-[corpo opcional detalhando a motivação e mudanças]
+> [!IMPORTANT]
+> **REGRA DE IDIOMA:** NUNCA utilize português em:
+> - Mensagens de commit e nomes de branches;
+> - Nomes de funções, variáveis, arquivos de código, interfaces, tipos e constantes;
+> - Comentários e docstrings internos de código;
+> - Títulos e descrições técnicas de Pull Requests.
+> 
+> **A ÚNICA exceção permitida em português:**
+> 1. URLs das rotas públicas voltadas aos usuários (ex: `/acoes`, `/transparencia`, `/voluntariado`, `/contato`, `/sobre`, etc.);
+> 2. Conteúdo textual visual exibido na interface pública para os usuários do portal da ONG brasileira.
+
+Todos os commits DEVEM seguir o padrão Conventional Commits estritamente em **inglês**:
+```
+<tipo>[escopo opcional]: <descrição curta no imperativo em inglês>
+
+[corpo opcional detalhando motivação e mudanças em inglês]
 
 [rodapé opcional: BREAKING CHANGE ou referências a issues]
 ```
@@ -60,25 +72,26 @@ Todos os commits DEVEM seguir o padrão:
 - **`ci`**: Alterações nos arquivos de integração contínua (`.github/workflows`).
 - **`chore`**: Tarefas de manutenção rotineiras que não afetam o código de produção.
 
-#### Exemplos Válidos:
+#### Exemplos Válidos (Sempre em Inglês):
 ```bash
-git commit -m "feat(cms): adicionar bloco de depoimentos no construtor de missoes"
-git commit -m "fix(header): corrigir alinhamento do dropdown de acoes no mobile"
-git commit -m "docs(agents): documentar git flow e conventional commits"
+git commit -m "feat(cms): add testimonials block to mission builder"
+git commit -m "fix(header): correct actions dropdown alignment on mobile"
+git commit -m "docs(agents): document git flow and english code conventions"
+git commit -m "refactor(auth): simplify session cookie validation helper"
 ```
 
 ### 4. Push da Branch da Tarefa
 Envie a branch criada para o repositório remoto:
 ```bash
-git push -u origin feature/nome-da-funcionalidade
+git push -u origin feature/mission-testimonials-block
 ```
 
 ### 5. Abertura do Pull Request para `develop`
-Abra o PR com destino estritamente à branch `develop`:
+Abra o PR com destino estritamente à branch `develop`, com título e descrição técnica em **inglês**:
 ```bash
-gh pr create --base develop --head feature/nome-da-funcionalidade \
-  --title "tipo(escopo): resumo da entrega" \
-  --body "Descrição clara das alterações realizadas..."
+gh pr create --base develop --head feature/mission-testimonials-block \
+  --title "feat(cms): add testimonials block to mission builder" \
+  --body "Clear description of changes in english..."
 ```
 
 ### 6. Merge na `develop` e Exclusão da Branch de Trabalho
@@ -148,7 +161,11 @@ gh pr edit <numero_do_pr> --body "## 🚀 Changelog Completo da Versão..."
 
 ### 4. Autenticação Administrativa (`/admin`)
 - Protegida por cookie de sessão seguro (`HttpOnly`, HMAC-SHA256).
-- Autentica via **Supabase Auth** (`supabase.auth.signInWithPassword`) ou variáveis de ambiente `ADMIN_EMAIL` e `ADMIN_PASSWORD`.
+- Autentica exclusivamente via **Supabase Auth** (`supabase.auth.signInWithPassword`), provisionado via `supabase/create_admin.sql` ou Supabase Dashboard (`Authentication -> Users`).
+
+### 5. Doações Pontuais & Recorrentes (Stripe Customer Portal)
+- Suporta doação avulsa (`mode: 'payment'`) e doação mensal recorrente (`mode: 'subscription'`).
+- Rota de autoatendimento para o doador: `/doacao/gerenciar` conectada à API `/api/stripe/portal` (Stripe Customer Portal) para gerenciamento autônomo de cartão, download de faturas/recibos e cancelamento a qualquer momento.
 
 ---
 
