@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 export const ADMIN_COOKIE_NAME = "amor_em_acao_admin_session";
-const SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 7; // 7 dias
+const SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
 
 function getSigningSecret(): string {
   return (
@@ -77,7 +77,7 @@ export function getAdminSessionFromRequest(
   const session = verifySessionToken(cookieToken);
   if (session) return session;
 
-  // Suporte adicional a chave via header (caso usado por script)
+  // Additional header key support for script-based access
   const expectedKey = process.env.ADMIN_PASSWORD || process.env.ADMIN_API_KEY;
   const headerKey = request.headers.get("x-admin-key");
   if (expectedKey && headerKey && headerKey === expectedKey) {
@@ -91,9 +91,9 @@ export function getAdminSessionFromRequest(
 }
 
 /**
- * Valida credenciais humanas de login:
- * 1) Verifica se batem com ADMIN_EMAIL + ADMIN_PASSWORD (ou ADMIN_API_KEY) das variáveis de ambiente;
- * 2) Caso contrário, autentica diretamente no Supabase Auth (`signInWithPassword`).
+ * Validates admin credentials:
+ * 1) Checks against ADMIN_EMAIL + ADMIN_PASSWORD (or ADMIN_API_KEY) in environment variables;
+ * 2) Alternatively, authenticates against Supabase Auth (`signInWithPassword`).
  */
 export async function authenticateAdminCredentials(
   email: string,
@@ -110,7 +110,7 @@ export async function authenticateAdminCredentials(
     process.env.ADMIN_PASSWORD?.trim() || process.env.ADMIN_API_KEY?.trim();
   const envEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
 
-  // 1. Checa credenciais configuradas via variáveis de ambiente
+  // 1. Check credentials configured via environment variables
   if (envPassword) {
     const emailMatches = !envEmail || envEmail === cleanEmail;
     if (emailMatches && cleanPass === envPassword) {
@@ -118,7 +118,7 @@ export async function authenticateAdminCredentials(
     }
   }
 
-  // 2. Checa autenticação via Supabase Auth (usuário criado em Authentication -> Users no Supabase)
+  // 2. Check authentication via Supabase Auth (user created in Authentication -> Users in Supabase)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const supabaseKey =
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ||
@@ -137,7 +137,7 @@ export async function authenticateAdminCredentials(
         return { ok: true, email: data.user.email };
       }
     } catch {
-      // Continua para mensagem de erro padrão
+      // Fallthrough to standard error message
     }
   }
 

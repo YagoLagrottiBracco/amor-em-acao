@@ -54,7 +54,7 @@ export function Header() {
           setTotalActionsCount(data.totalCount);
         }
       } catch {
-        // Usa as iniciais com segurança
+        // Silently fallback to default initial actions
       }
     }
     void fetchNavActions();

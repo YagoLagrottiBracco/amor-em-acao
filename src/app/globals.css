@@ -165,7 +165,7 @@ body {
   box-shadow: 0 0 0 3px rgba(245, 130, 32, 0.14);
 }
 
-/* Estilos editoriais para artigos do Blog (SEO Readability) */
+/* Editorial typography styles for Blog articles (SEO Readability) */
 .blog-prose h2 {
   font-family: var(--font-manrope), "Manrope", sans-serif;
   font-size: 1.65rem;
@@ -229,7 +229,7 @@ body {
   }
 }
 
-/* Editor Visual WYSIWYG Milkdown Crepe (mesmo padrão do portfólio) */
+/* Milkdown Crepe WYSIWYG Visual Editor */
 .blog-editor-tabs {
   display: flex;
   flex-wrap: wrap;
@@ -305,7 +305,7 @@ body {
   box-shadow: 0 0 0 3px rgba(245, 130, 32, 0.14);
 }
 
-/* Modo Leitura focado */
+/* Focused Reading Mode */
 body.reading-focus header,
 body.reading-focus footer {
   opacity: 0.15;
@@ -317,7 +317,7 @@ body.reading-focus footer:hover {
   opacity: 1;
 }
 
-/* Destaque do trecho sendo lido pelo "Ouvir este artigo" */
+/* Active paragraph highlight during text-to-speech reading */
 .speech-reading {
   background: rgba(245, 130, 32, 0.14);
   box-shadow: 0 0 0 0.35rem rgba(245, 130, 32, 0.14);
