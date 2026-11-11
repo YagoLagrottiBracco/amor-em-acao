@@ -102,6 +102,18 @@ export function buildMetadata({
     ],
     creator: SITE_CONFIG.developer.name,
     publisher: SITE_CONFIG.legalName,
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+        { url: "/favicon-192x192.png", sizes: "192x192", type: "image/png" },
+        { url: "/favicon.jpg", sizes: "512x512", type: "image/jpeg" },
+      ],
+      shortcut: ["/favicon.ico"],
+      apple: [
+        { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      ],
+    },
     alternates: {
       canonical: canonicalUrl,
       languages: {
