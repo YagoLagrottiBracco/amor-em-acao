@@ -61,7 +61,7 @@ export function Footer() {
                   href="/blog"
                   className="hover:text-orange-300 transition"
                 >
-                  Blog e Artigos
+                  Notícias e Artigos
                 </Link>
               </li>
             </ul>

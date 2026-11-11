@@ -236,7 +236,7 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
               <div className="max-w-2xl">
-                <p className="section-kicker">Blog e Artigos</p>
+                <p className="section-kicker">Notícias e Artigos</p>
                 <h2 className="display text-3xl md:text-4xl font-extrabold mt-3">
                   Histórias, transparência e impacto social
                 </h2>
@@ -251,7 +251,7 @@ export default async function HomePage() {
                   href="/blog"
                   className="bg-orange-50 hover:bg-orange-100 text-orange-800 font-extrabold text-sm px-5 py-3 rounded-xl transition"
                 >
-                  Ver todos os artigos{" "}
+                  Ver todas as notícias{" "}
                   <i className="fa-solid fa-arrow-right ml-1.5" />
                 </Link>
               </div>

@@ -134,7 +134,7 @@ export default async function DoacaoSucessoPage({
             href="/blog"
             className="bg-orange-50 text-orange-800 font-bold px-6 py-3.5 rounded-xl hover:bg-orange-100 transition"
           >
-            Acompanhar o Blog
+            Acompanhar Notícias
           </Link>
           <Link
             href="/transparencia"
