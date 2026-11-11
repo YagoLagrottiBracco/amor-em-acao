@@ -9,8 +9,9 @@
 
 Portal institucional completo, sistema de gestão de missões comunitárias com construtor visual de blocos modulares, portal da transparência, blog oficial com editor WYSIWYG de alta qualidade editorial, doações via Stripe e inscrições de voluntários para a **Associação Humanitária Amor em Ação** (Jardim Gramacho · Duque de Caxias/RJ).
 
-- **URL de Produção:** [https://amoremacao.lagrotti.dev](https://amoremacao.lagrotti.dev)
-- **Painel Administrativo:** [https://amoremacao.lagrotti.dev/admin](https://amoremacao.lagrotti.dev/admin)
+- **URL Oficial de Produção:** [https://amoremacao.org/](https://amoremacao.org/)
+- **URL de Preview / Staging:** [https://amoremacao.lagrotti.dev](https://amoremacao.lagrotti.dev)
+- **Painel Administrativo:** [https://amoremacao.org/admin](https://amoremacao.org/admin) (Produção) / [https://amoremacao.lagrotti.dev/admin](https://amoremacao.lagrotti.dev/admin) (Preview)
 
 ---
 
@@ -70,21 +71,32 @@ Portal institucional completo, sistema de gestão de missões comunitárias com 
 
 ---
 
-## 🔀 Estratégia de Branches (Git Flow)
+## 🔀 Estratégia de Branches & Git Flow (Conventional Commits)
 
-O repositório possui duas branches ativas:
+O repositório segue estritamente o padrão **Git Flow** e a especificação [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
 
-- **`main`**: Código de produção estável. Qualquer merge nesta branch dispara o deploy oficial de produção.
-- **`preview`**: Branch de trabalho, staging e validação. Todos os commits e novas funcionalidades são enviados primeiramente para esta branch.
+- **`release`**: Branch de produção e versões estáveis (conectada à Vercel para produção).
+- **`develop`**: Branch padrão de desenvolvimento contínuo e integração (staging).
+- **`feature/*`**, **`fix/*`**, **`refactor/*`**: Branches de trabalho criadas a partir de `develop`.
 
-### Regra de Contribuição:
-1. Todas as alterações são commitadas e enviadas para a branch `preview`:
+### Fluxo de Trabalho:
+1. Atualize a `develop` e crie a branch da sua tarefa:
    ```bash
-   git push origin preview
+   git checkout develop && git pull origin develop
+   git checkout -b feature/nome-da-tarefa
    ```
-2. Ao concluir uma entrega, é aberto um Pull Request (PR) da branch `preview` para a `main`:
+2. Desenvolva, teste e faça commits seguindo o padrão Conventional Commits:
    ```bash
-   gh pr create --base main --head preview --title "feat: descrição da alteração" --body "Detalhes da entrega..."
+   git commit -m "feat(modulo): descricao no imperativo"
+   ```
+3. Envie a branch e abra um Pull Request para `develop`:
+   ```bash
+   git push -u origin feature/nome-da-tarefa
+   gh pr create --base develop --head feature/nome-da-tarefa --fill
+   ```
+4. Para fechar uma release em produção, abra um PR de `develop` para `release`:
+   ```bash
+   gh pr create --base release --head develop --title "release: v1.X.X" --body "Resumo das entregas..."
    ```
 
 ---
@@ -110,7 +122,7 @@ npm install
 Crie o arquivo `.env.local` na raiz com base no [`.env.example`](./.env.example):
 
 ```env
-NEXT_PUBLIC_SITE_URL=https://amoremacao.lagrotti.dev
+NEXT_PUBLIC_SITE_URL=https://amoremacao.org
 
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_anon_key
@@ -140,12 +152,21 @@ npm run start
 ### 5. Deploy na Vercel
 
 ```bash
-# Deploy direto para preview
+# Deploy direto para preview / staging (amoremacao.lagrotti.dev)
 vercel
 
-# Deploy oficial de produção
+# Deploy oficial de produção (amoremacao.org)
 vercel --prod
 ```
+
+---
+
+## 🌿 Git Flow & Governança
+
+O projeto utiliza estritamente o modelo **Git Flow** aliado ao padrão [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
+- **`develop`**: Branch padrão de desenvolvimento, staging e CI contínuo.
+- **`release`**: Branch de produção com histórico protegido e estável.
+- Para detalhes completos do ciclo de vida de desenvolvimento, consulte as diretrizes em [`AGENTS.md`](./AGENTS.md).
 
 ---
 

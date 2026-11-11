@@ -13,7 +13,7 @@ export const SITE_CONFIG = {
       ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
       : process.env.VERCEL_URL
       ? `https://${process.env.VERCEL_URL}`
-      : "https://amoremacao.lagrotti.dev"),
+      : "https://amoremacao.org"),
   locale: "pt_BR",
   themeColor: "#f97316",
   instagramUrl: "https://www.instagram.com/ahamoremacao/",
