@@ -100,7 +100,10 @@ export async function POST(request: NextRequest) {
       project: projectKey,
       status: "pending",
       paymentMethod: "stripe",
-      notes: `Checkout Stripe iniciado (${projectName})`,
+      notes:
+        frequency === "subscription"
+          ? `Doação mensal recorrente iniciada via Stripe (${projectName})`
+          : `Doação única iniciada via Stripe (${projectName})`,
     });
 
     return NextResponse.json({ id: session.id, url: session.url });
