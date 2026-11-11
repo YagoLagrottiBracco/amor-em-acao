@@ -19,25 +19,27 @@ O projeto adota estritamente o **Git Flow** aliado à especificação [Conventio
 
 > [!IMPORTANT]
 > **NUNCA** faça commits ou `git push` diretamente nas branches `release` ou `develop`.  
-> Siga rigorosamente os 6 passos abaixo ao receber qualquer instrução:
+> Siga rigorosamente os 7 passos abaixo ao receber qualquer instrução:
 
 ### 1. Início da Tarefa — Atualizar e Criar Branch
-Antes de alterar qualquer código, garanta que a branch `develop` está limpa e crie a branch de trabalho:
+Antes de alterar qualquer código, garanta que a branch `develop` está limpa e sincronizada, e crie a branch de trabalho:
 ```bash
 git checkout develop
 git pull origin develop
 git checkout -b feature/nome-da-funcionalidade
-# ou fix/nome-da-correcao, refactor/nome-do-modulo, etc.
+# ou fix/nome-da-correcao, refactor/nome-do-modulo, chore/nome-da-manutencao, etc.
 ```
 
-### 2. Validação Local Pré-Commit
-Antes de commitar, certifique-se de que a compilação passa com código de saída 0:
+### 2. Commits Frequentes no Decorrer de Ações Críticas
+- **NÃO** acumule todas as modificações para um único commit no final.
+- Faça **commits atômicos e convencionais a cada etapa crítica concluída** (ex: migração de banco/schema, criação de rotas de API, criação de componentes de UI, tipagem e ajustes de SEO).
+- Antes de cada commit intermediário ou final, valide o build:
 ```bash
 npm run build
 ```
 
-### 3. Commit com Conventional Commits v1.0.0
-Todos os commits DEVEM seguir o padrão Conventional Commits:
+### 3. Padrão Conventional Commits v1.0.0
+Todos os commits DEVEM seguir o padrão:
 ```
 <tipo>[escopo opcional]: <descrição curta no imperativo>
 
@@ -72,19 +74,33 @@ git push -u origin feature/nome-da-funcionalidade
 ```
 
 ### 5. Abertura do Pull Request para `develop`
-Ao concluir a instrução, abra automaticamente o PR com destino à branch `develop`:
+Abra o PR com destino estritamente à branch `develop`:
 ```bash
 gh pr create --base develop --head feature/nome-da-funcionalidade \
   --title "tipo(escopo): resumo da entrega" \
   --body "Descrição clara das alterações realizadas..."
 ```
 
-### 6. Promoção para Produção (`develop` &rarr; `release`)
-Quando uma versão for consolidada e validada em staging, uma release é promovida de `develop` para `release` via Pull Request:
+### 6. Merge na `develop` e Exclusão da Branch de Trabalho
+Realize o merge do PR na branch `develop` e apague a branch de trabalho (local e remotamente):
+```bash
+gh pr merge <numero_do_pr> --merge --delete-branch
+```
+Em seguida, garanta que a cópia local esteja em `develop` e atualizada:
+```bash
+git checkout develop
+git pull origin develop
+```
+
+### 7. Pull Request de Release (`develop` &rarr; `release`) com Changelog Completo
+Ao concluir a entrega na branch `develop`, garanta a abertura ou atualização do Pull Request para a branch `release`.  
+O PR de release DEVE conter um **Changelog completo e exaustivo**, descrevendo tudo o que foi feito e todos os recursos presentes no sistema:
 ```bash
 gh pr create --base release --head develop \
   --title "release: v1.X.X - resumo das entregas" \
-  --body "Changelog detalhado das funcionalidades prontas para produção."
+  --body "## 🚀 Changelog Completo da Versão ... (descrição de tudo o que tem e foi feito)"
+# Se o PR já estiver aberto, atualize seu título e corpo:
+gh pr edit <numero_do_pr> --body "## 🚀 Changelog Completo da Versão..."
 ```
 
 ---

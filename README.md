@@ -152,12 +152,21 @@ npm run start
 ### 5. Deploy na Vercel
 
 ```bash
-# Deploy direto para preview
+# Deploy direto para preview / staging (amoremacao.lagrotti.dev)
 vercel
 
-# Deploy oficial de produção
+# Deploy oficial de produção (amoremacao.org)
 vercel --prod
 ```
+
+---
+
+## 🌿 Git Flow & Governança
+
+O projeto utiliza estritamente o modelo **Git Flow** aliado ao padrão [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
+- **`develop`**: Branch padrão de desenvolvimento, staging e CI contínuo.
+- **`release`**: Branch de produção com histórico protegido e estável.
+- Para detalhes completos do ciclo de vida de desenvolvimento, consulte as diretrizes em [`AGENTS.md`](./AGENTS.md).
 
 ---
 
