@@ -43,7 +43,7 @@ export default async function DoacaoSucessoPage({
           donorEmail: session.customer_details?.email || undefined,
         });
       } catch {
-        // Segue normalmente caso a sessão seja de teste ou já tenha sido verificada
+        // Proceed normally if session is in test mode or already verified
       }
     }
   }

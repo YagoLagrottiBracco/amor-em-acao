@@ -11,9 +11,9 @@ export function isSupabaseConfigured(): boolean {
 let serverClient: SupabaseClient | null = null;
 
 /**
- * Cliente Supabase para uso em rotas de API e Server Components.
- * Prioriza a Service Role Key (para operações de escrita do painel admin sem depender de RLS complexa)
- * e faz fallback para a Anon Key quando em modo público.
+ * Supabase server client for API routes and Server Components.
+ * Prioritizes the Service Role Key for administrative operations
+ * and falls back to Anon Key when in read-only public context.
  */
 export function getSupabaseAdmin(): SupabaseClient | null {
   if (!isSupabaseConfigured()) {

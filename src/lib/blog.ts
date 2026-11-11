@@ -29,7 +29,7 @@ interface SupabaseBlogRow {
   updated_at: string;
 }
 
-// Fallback em memória apenas para quando variáveis do Supabase ainda não estiverem preenchidas
+// In-memory fallback for initial development before Supabase is connected
 let memoryPosts: BlogPost[] = [];
 
 function rowToPost(row: SupabaseBlogRow): BlogPost {
@@ -113,7 +113,7 @@ export async function getAllBlogPostsAsync(options?: {
         };
       }
     } catch {
-      // Fallback caso a tabela ainda não tenha sido criada
+      // Fallback if table does not exist yet
     }
   }
 
@@ -145,7 +145,7 @@ export async function getBlogPostBySlugAsync(
         return rowToPost(data as SupabaseBlogRow);
       }
     } catch {
-      // Fallback em memória
+      // Fallback to in-memory store
     }
   }
   return memoryPosts.find((p) => p.slug === slug);

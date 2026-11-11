@@ -80,7 +80,7 @@ export function AdminDashboardClient({
       : initialTab
   );
 
-  // ==================== AUTENTICAÇÃO DE ADMIN ====================
+  // ==================== ADMIN AUTHENTICATION ====================
   const [authStatus, setAuthStatus] = useState<
     "loading" | "authenticated" | "unauthenticated"
   >("loading");
@@ -90,7 +90,7 @@ export function AdminDashboardClient({
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
 
-  // ==================== ESTADO DO BLOG ====================
+  // ==================== BLOG STATE ====================
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [blogStorage, setBlogStorage] = useState<"supabase" | "local">("local");
   const [loadingPosts, setLoadingPosts] = useState(true);
@@ -138,7 +138,7 @@ export function AdminDashboardClient({
     text: string;
   } | null>(null);
 
-  // ==================== ESTADO DE DOAÇÕES ====================
+  // ==================== DONATIONS STATE ====================
   const [donations, setDonations] = useState<DonationRecord[]>([]);
   const [donationStorage, setDonationStorage] = useState<"supabase" | "local">(
     "local"
@@ -155,7 +155,7 @@ export function AdminDashboardClient({
     text: string;
   } | null>(null);
 
-  // Formulário de registro manual de doação (Pix / Transferência / Presencial)
+  // Manual donation registration state
   const [manualDonorName, setManualDonorName] = useState("");
   const [manualDonorEmail, setManualDonorEmail] = useState("");
   const [manualAmountBRL, setManualAmountBRL] = useState("");
@@ -170,7 +170,7 @@ export function AdminDashboardClient({
   const [manualNotes, setManualNotes] = useState("");
   const [savingDonation, setSavingDonation] = useState(false);
 
-  // ==================== ESTADO DE VOLUNTARIADOS ====================
+  // ==================== VOLUNTEERS STATE ====================
   const [volunteers, setVolunteers] = useState<VolunteerRecord[]>([]);
   const [volunteerStorage, setVolunteerStorage] = useState<
     "supabase" | "local"
@@ -180,7 +180,7 @@ export function AdminDashboardClient({
     useState<string>("all");
   const [volunteerSearch, setVolunteerSearch] = useState("");
 
-  // Aviso ao sair com alterações não salvas (igual ao portfólio)
+  // Warn on exit with unsaved changes
   useEffect(() => {
     const warning = (event: BeforeUnloadEvent) => {
       if (dirty) {
@@ -204,7 +204,7 @@ export function AdminDashboardClient({
         setBlogStorage(data.storage);
       }
     } catch {
-      // Ignorar
+      // Fallback on network or fetch error
     } finally {
       setLoadingPosts(false);
     }
@@ -222,7 +222,7 @@ export function AdminDashboardClient({
         setDonationStorage(data.storage);
       }
     } catch {
-      // Ignorar
+      // Fallback on network or fetch error
     } finally {
       setLoadingDonations(false);
     }
@@ -240,20 +240,20 @@ export function AdminDashboardClient({
         setVolunteerStorage(data.storage);
       }
     } catch {
-      // Ignorar
+      // Fallback on network or fetch error
     } finally {
       setLoadingVolunteers(false);
     }
   }
 
-  // ==================== ESTADO DE MISSÕES / AÇÕES ====================
+  // ==================== MISSIONS / ACTIONS STATE ====================
   const [actionsList, setActionsList] = useState<ActionMission[]>([]);
   const [actionStorage, setActionStorage] = useState<"supabase" | "local">(
     "local"
   );
   const [loadingActions, setLoadingActions] = useState(true);
 
-  // ==================== ESTADO DE TRANSPARÊNCIA ====================
+  // ==================== TRANSPARENCY STATE ====================
   const [transparencyDocs, setTransparencyDocs] = useState<
     TransparencyDocument[]
   >([]);
@@ -274,7 +274,7 @@ export function AdminDashboardClient({
         setActionStorage(data.storage);
       }
     } catch {
-      // Ignorar
+      // Fallback on network or fetch error
     } finally {
       setLoadingActions(false);
     }
@@ -292,7 +292,7 @@ export function AdminDashboardClient({
         setTransparencyStorage(data.storage);
       }
     } catch {
-      // Ignorar
+      // Fallback on network or fetch error
     } finally {
       setLoadingTransparency(false);
     }
@@ -370,7 +370,7 @@ export function AdminDashboardClient({
     try {
       await fetch("/api/admin/auth", { method: "DELETE" });
     } catch {
-      // Ignorar
+      // Ignore logout request error
     }
     setAuthStatus("unauthenticated");
     setAdminEmail("");
@@ -464,7 +464,7 @@ export function AdminDashboardClient({
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // Função idêntica ao `stageAsset` do portfólio para upload de imagens dentro do Milkdown Crepe!
+  // Staging inline images for Milkdown Crepe WYSIWYG editor
   async function stageInlineAsset(file: File): Promise<string> {
     if (
       !/^image\/(png|jpeg|webp|avif)$/.test(file.type) ||
@@ -695,7 +695,7 @@ export function AdminDashboardClient({
         }
       }
     } catch {
-      // Ignorar
+      // Fallback on network or fetch error
     }
   }
 
@@ -710,7 +710,7 @@ export function AdminDashboardClient({
     );
   }, [posts, searchQuery]);
 
-  // ==================== AÇÕES DE DOAÇÕES ====================
+  // ==================== DONATIONS ACTIONS ====================
   async function handleRegisterManualDonation(e: React.FormEvent) {
     e.preventDefault();
     if (savingDonation) return;
@@ -807,7 +807,7 @@ export function AdminDashboardClient({
         await fetchDonations();
       }
     } catch {
-      // Ignorar
+      // Fallback on network or fetch error
     }
   }
 
@@ -822,7 +822,7 @@ export function AdminDashboardClient({
         await fetchDonations();
       }
     } catch {
-      // Ignorar
+      // Fallback on network or fetch error
     }
   }
 
@@ -864,7 +864,7 @@ export function AdminDashboardClient({
     });
   }, [donations, donationFilterStatus, donationSearch]);
 
-  // ==================== AÇÕES DE VOLUNTARIADOS ====================
+  // ==================== VOLUNTEERS ACTIONS ====================
   async function handleUpdateVolunteerStatus(
     id: string,
     status: VolunteerStatus
@@ -882,7 +882,7 @@ export function AdminDashboardClient({
         await fetchVolunteers();
       }
     } catch {
-      // Ignorar
+      // Ignore network error
     }
   }
 
@@ -903,7 +903,7 @@ export function AdminDashboardClient({
         await fetchVolunteers();
       }
     } catch {
-      // Ignorar
+      // Ignore network error
     }
   }
 
@@ -941,7 +941,7 @@ export function AdminDashboardClient({
     donationStorage === "supabase" ||
     volunteerStorage === "supabase";
 
-  // ==================== TELA DE VERIFICAÇÃO DE SESSÃO ====================
+  // ==================== SESSION VERIFICATION VIEW ====================
   if (authStatus === "loading") {
     return (
       <div className="min-h-[75vh] bg-[#fffaf5] flex items-center justify-center px-4">
@@ -961,7 +961,7 @@ export function AdminDashboardClient({
     );
   }
 
-  // ==================== TELA DE LOGIN DO ADMIN ====================
+  // ==================== ADMIN LOGIN VIEW ====================
   if (authStatus === "unauthenticated") {
     return (
       <div className="min-h-[82vh] bg-[#fffaf5] flex items-center justify-center px-4 py-12">
