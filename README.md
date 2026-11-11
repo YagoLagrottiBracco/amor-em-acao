@@ -70,21 +70,32 @@ Portal institucional completo, sistema de gestão de missões comunitárias com 
 
 ---
 
-## 🔀 Estratégia de Branches (Git Flow)
+## 🔀 Estratégia de Branches & Git Flow (Conventional Commits)
 
-O repositório possui duas branches ativas:
+O repositório segue estritamente o padrão **Git Flow** e a especificação [Conventional Commits v1.0.0](https://www.conventionalcommits.org/en/v1.0.0/):
 
-- **`main`**: Código de produção estável. Qualquer merge nesta branch dispara o deploy oficial de produção.
-- **`preview`**: Branch de trabalho, staging e validação. Todos os commits e novas funcionalidades são enviados primeiramente para esta branch.
+- **`release`**: Branch de produção e versões estáveis (conectada à Vercel para produção).
+- **`develop`**: Branch padrão de desenvolvimento contínuo e integração (staging).
+- **`feature/*`**, **`fix/*`**, **`refactor/*`**: Branches de trabalho criadas a partir de `develop`.
 
-### Regra de Contribuição:
-1. Todas as alterações são commitadas e enviadas para a branch `preview`:
+### Fluxo de Trabalho:
+1. Atualize a `develop` e crie a branch da sua tarefa:
    ```bash
-   git push origin preview
+   git checkout develop && git pull origin develop
+   git checkout -b feature/nome-da-tarefa
    ```
-2. Ao concluir uma entrega, é aberto um Pull Request (PR) da branch `preview` para a `main`:
+2. Desenvolva, teste e faça commits seguindo o padrão Conventional Commits:
    ```bash
-   gh pr create --base main --head preview --title "feat: descrição da alteração" --body "Detalhes da entrega..."
+   git commit -m "feat(modulo): descricao no imperativo"
+   ```
+3. Envie a branch e abra um Pull Request para `develop`:
+   ```bash
+   git push -u origin feature/nome-da-tarefa
+   gh pr create --base develop --head feature/nome-da-tarefa --fill
+   ```
+4. Para fechar uma release em produção, abra um PR de `develop` para `release`:
+   ```bash
+   gh pr create --base release --head develop --title "release: v1.X.X" --body "Resumo das entregas..."
    ```
 
 ---
