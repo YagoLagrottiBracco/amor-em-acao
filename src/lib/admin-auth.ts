@@ -120,7 +120,7 @@ export async function authenticateAdminCredentials(
       return {
         ok: false,
         error:
-          "E-mail ou senha inválidos. Verifique as credenciais cadastradas no Supabase Auth.",
+          "E-mail ou senha inválidos. Verifique as credenciais cadastradas.",
       };
     }
 
@@ -129,7 +129,7 @@ export async function authenticateAdminCredentials(
     const message =
       err instanceof Error
         ? err.message
-        : "Erro ao autenticar no Supabase Auth.";
+        : "Erro ao autenticar.";
     return {
       ok: false,
       error: message,

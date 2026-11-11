@@ -1059,9 +1059,7 @@ export function AdminDashboardClient({
               <i className="fa-solid fa-key text-orange-600 mr-1.5" />
               Autenticação Segura:
             </strong>
-            Entre com as credenciais cadastradas no{" "}
-            <strong>Supabase Auth</strong> (Authentication &rarr; Users ou via
-            script SQL <code>supabase/create_admin.sql</code>).
+            Entre com as credenciais cadastradas.
           </div>
 
           <div className="text-center pt-1">
