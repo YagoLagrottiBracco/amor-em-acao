@@ -49,6 +49,10 @@ export default async function BlogIndexPage({
         position: index + 1,
         url: `${SITE_CONFIG.url}/blog/${post.slug}`,
         name: post.title,
+        description: post.excerpt,
+        image: post.coverImage.startsWith("http")
+          ? post.coverImage
+          : `${SITE_CONFIG.url}${post.coverImage}`,
       })),
     },
   };

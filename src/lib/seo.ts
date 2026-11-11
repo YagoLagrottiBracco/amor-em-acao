@@ -4,9 +4,10 @@ export const SITE_CONFIG = {
   name: "Amor em Ação",
   legalName: "Associação Humanitária Amor em Ação",
   cnpj: "21.960.082/0001-96",
-  title: "Amor em Ação | Projetos Comunitários, Casa Amarela e Voluntariado",
+  title:
+    "Associação Humanitária Amor em Ação | Casa Amarela, Gramacho, Nordeste e Malawi",
   description:
-    "Associação Humanitária Amor em Ação — informações públicas, ações sociais na Casa Amarela em Jardim Gramacho (Duque de Caxias/RJ), Nordeste, voluntariado, transparência e blog oficial.",
+    "Portal oficial da Associação Humanitária Amor em Ação (CNPJ 21.960.082/0001-96). Acolhimento infantil, alimentação diária, reforço escolar na Casa Amarela (Jardim Gramacho, Duque de Caxias/RJ), ações no sertão do Nordeste e apoio humanitário no Malawi.",
   url:
     process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
     (process.env.VERCEL_PROJECT_PRODUCTION_URL
@@ -23,7 +24,12 @@ export const SITE_CONFIG = {
     neighborhood: "Jardim Gramacho",
     addressLocality: "Duque de Caxias",
     addressRegion: "RJ",
+    postalCode: "25055-000",
     addressCountry: "BR",
+  },
+  geo: {
+    latitude: -22.7562,
+    longitude: -43.2842,
   },
   developer: {
     name: "Yago Lagrotti Bracco",
@@ -31,17 +37,21 @@ export const SITE_CONFIG = {
   },
   defaultOgImage: "/images/casa-amarela-equipe-criancas.jpg",
   keywords: [
-    "Amor em Ação",
     "Associação Humanitária Amor em Ação",
+    "Amor em Ação",
     "Casa Amarela Jardim Gramacho",
-    "ONG Duque de Caxias",
-    "projetos sociais Jardim Gramacho",
-    "voluntariado Rio de Janeiro",
-    "doação ONG infantil",
-    "acolhimento comunitário crianças",
-    "ações sociais Nordeste Matões do Norte",
-    "transparência terceiro setor",
+    "ONG Jardim Gramacho Duque de Caxias",
+    "ONG acolhimento infantil Rio de Janeiro",
+    "projetos sociais Baixada Fluminense",
+    "voluntariado Jardim Gramacho RJ",
+    "doação ONG crianças vulnerabilidade",
+    "ações sociais sertão Matões do Norte MA",
+    "ajuda humanitária poços de água Malawi",
+    "transparência e prestação de contas ONG",
     "CNPJ 21.960.082/0001-96",
+    "segurança alimentar terceiro setor",
+    "educação comunitária reforço escolar",
+    "apadrinhamento comunitário",
   ],
 };
 
@@ -152,20 +162,84 @@ export function getOrganizationJsonLd() {
     "@type": "NGO",
     "@id": `${SITE_CONFIG.url}/#organization`,
     name: SITE_CONFIG.legalName,
-    alternateName: SITE_CONFIG.name,
+    alternateName: [
+      SITE_CONFIG.name,
+      "Casa Amarela Jardim Gramacho",
+      "Associação Amor em Ação",
+      "Amor em Ação ONG",
+    ],
+    legalName: SITE_CONFIG.legalName,
     url: SITE_CONFIG.url,
-    logo: `${SITE_CONFIG.url}/images/logo-amor-em-acao.webp`,
+    logo: {
+      "@type": "ImageObject",
+      url: `${SITE_CONFIG.url}/images/logo-amor-em-acao.webp`,
+      caption: SITE_CONFIG.legalName,
+    },
     image: `${SITE_CONFIG.url}${SITE_CONFIG.defaultOgImage}`,
     description: SITE_CONFIG.description,
     taxID: SITE_CONFIG.cnpj,
+    foundingLocation: {
+      "@type": "Place",
+      name: "Jardim Gramacho, Duque de Caxias, Rio de Janeiro, Brasil",
+    },
     address: {
       "@type": "PostalAddress",
       streetAddress: SITE_CONFIG.address.streetAddress,
       addressLocality: SITE_CONFIG.address.addressLocality,
       addressRegion: SITE_CONFIG.address.addressRegion,
+      postalCode: SITE_CONFIG.address.postalCode,
       addressCountry: SITE_CONFIG.address.addressCountry,
     },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: SITE_CONFIG.geo.latitude,
+      longitude: SITE_CONFIG.geo.longitude,
+    },
+    areaServed: [
+      {
+        "@type": "AdministrativeArea",
+        name: "Jardim Gramacho, Duque de Caxias - RJ",
+      },
+      {
+        "@type": "AdministrativeArea",
+        name: "Matões do Norte - MA",
+      },
+      {
+        "@type": "Country",
+        name: "Malawi",
+      },
+      {
+        "@type": "Country",
+        name: "Brasil",
+      },
+    ],
+    knowsAbout: [
+      "Acolhimento Comunitário Infantil",
+      "Educação e Reforço Escolar",
+      "Segurança Alimentar e Combate à Fome",
+      "Acesso a Água Potável e Perfuração de Poços",
+      "Voluntariado e Assistência Humanitária",
+      "Transparência no Terceiro Setor",
+      "Jardim Gramacho e Baixada Fluminense",
+    ],
     sameAs: [SITE_CONFIG.instagramUrl],
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "Atendimento Geral e Voluntariado",
+        email: "contato@amoremacao.org",
+        url: `${SITE_CONFIG.url}/contato`,
+        availableLanguage: ["pt-BR", "Portuguese"],
+      },
+    ],
+    potentialAction: {
+      "@type": "DonateAction",
+      name: "Doar para Associação Humanitária Amor em Ação",
+      target: `${SITE_CONFIG.url}/#doar`,
+      recipient: {
+        "@id": `${SITE_CONFIG.url}/#organization`,
+      },
+    },
   };
 }
 
@@ -176,6 +250,7 @@ export function getWebsiteJsonLd() {
     "@id": `${SITE_CONFIG.url}/#website`,
     url: SITE_CONFIG.url,
     name: SITE_CONFIG.legalName,
+    alternateName: SITE_CONFIG.name,
     description: SITE_CONFIG.description,
     inLanguage: "pt-BR",
     publisher: {
@@ -209,5 +284,132 @@ export function getBreadcrumbJsonLd(
       name: item.name,
       item: `${SITE_CONFIG.url}${item.path === "/" ? "" : item.path}`,
     })),
+  };
+}
+
+export function getFaqJsonLd(faqs: { question: string; answer: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+}
+
+export function getItemListJsonLd(
+  name: string,
+  description: string,
+  items: { name: string; path: string; description?: string; image?: string }[]
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name,
+    description,
+    itemListElement: items.map((item, idx) => ({
+      "@type": "ListItem",
+      position: idx + 1,
+      name: item.name,
+      url: `${SITE_CONFIG.url}${item.path.startsWith("/") ? item.path : `/${item.path}`}`,
+      ...(item.description ? { description: item.description } : {}),
+      ...(item.image
+        ? {
+            image: item.image.startsWith("http")
+              ? item.image
+              : `${SITE_CONFIG.url}${item.image}`,
+          }
+        : {}),
+    })),
+  };
+}
+
+export function getArticleJsonLd(post: {
+  title: string;
+  excerpt: string;
+  slug: string;
+  coverImage: string;
+  coverImageAlt?: string;
+  publishedAt: string;
+  updatedAt?: string;
+  authorName?: string;
+  category?: string;
+  tags?: string[];
+}) {
+  const canonicalUrl = `${SITE_CONFIG.url}/blog/${post.slug}`;
+  const fullImageUrl = post.coverImage.startsWith("http")
+    ? post.coverImage
+    : `${SITE_CONFIG.url}${post.coverImage}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonicalUrl,
+    },
+    headline: post.title,
+    description: post.excerpt,
+    image: [fullImageUrl],
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt || post.publishedAt,
+    inLanguage: "pt-BR",
+    author: {
+      "@type": "Organization",
+      name: post.authorName || SITE_CONFIG.legalName,
+      url: SITE_CONFIG.url,
+    },
+    publisher: {
+      "@id": `${SITE_CONFIG.url}/#organization`,
+    },
+    ...(post.category ? { articleSection: post.category } : {}),
+    keywords: [post.category, ...(post.tags || [])].filter(Boolean).join(", "),
+  };
+}
+
+export function getSocialProjectJsonLd(action: {
+  title: string;
+  description: string;
+  slug: string;
+  coverImage?: string;
+  locationName?: string;
+}) {
+  const canonicalUrl = `${SITE_CONFIG.url}/acoes/${action.slug}`;
+  const fullImageUrl = action.coverImage
+    ? action.coverImage.startsWith("http")
+      ? action.coverImage
+      : `${SITE_CONFIG.url}${action.coverImage}`
+    : `${SITE_CONFIG.url}${SITE_CONFIG.defaultOgImage}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "Project",
+    "@id": `${canonicalUrl}/#project`,
+    name: action.title,
+    description: action.description,
+    url: canonicalUrl,
+    image: fullImageUrl,
+    inLanguage: "pt-BR",
+    organizer: {
+      "@id": `${SITE_CONFIG.url}/#organization`,
+    },
+    location: {
+      "@type": "Place",
+      name:
+        action.locationName ||
+        "Casa Amarela, Jardim Gramacho - Duque de Caxias/RJ",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: SITE_CONFIG.address.streetAddress,
+        addressLocality: SITE_CONFIG.address.addressLocality,
+        addressRegion: SITE_CONFIG.address.addressRegion,
+        addressCountry: SITE_CONFIG.address.addressCountry,
+      },
+    },
   };
 }
