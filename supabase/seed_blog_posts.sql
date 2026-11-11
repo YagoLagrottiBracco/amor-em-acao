@@ -4,6 +4,47 @@
 -- com todas as 27 publicações oficiais do acervo da Amor em Ação.
 -- ============================================================================
 
+create extension if not exists "pgcrypto";
+
+-- Garante a criação da tabela blog_posts caso o schema geral ainda não tenha sido executado
+create table if not exists public.blog_posts (
+  id text primary key default ('post-' || encode(gen_random_bytes(6), 'hex')),
+  slug text not null unique,
+  title text not null,
+  excerpt text not null,
+  pill_text text not null default 'Amor em Ação',
+  button_text text not null default 'Ler artigo completo',
+  custom_link text,
+  cover_image text not null default '/images/casa-amarela-equipe-criancas.jpg',
+  cover_image_alt text not null default '',
+  category text not null default 'Institucional',
+  tags text[] not null default '{}',
+  author_name text not null default 'Equipe Editorial Amor em Ação',
+  author_role text not null default 'Comunicação Institucional',
+  reading_time_minutes integer not null default 4,
+  featured boolean not null default false,
+  draft boolean not null default false,
+  seo_title text not null,
+  seo_description text not null,
+  focus_keyword text not null default '',
+  content text not null,
+  faq jsonb not null default '[]'::jsonb,
+  published_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create index if not exists idx_blog_posts_slug on public.blog_posts (slug);
+create index if not exists idx_blog_posts_published_at on public.blog_posts (published_at desc);
+create index if not exists idx_blog_posts_featured on public.blog_posts (featured);
+
+alter table public.blog_posts enable row level security;
+
+drop policy if exists "Public can read published blog posts" on public.blog_posts;
+create policy "Public can read published blog posts"
+  on public.blog_posts
+  for select
+  using (draft = false);
+
 insert into public.blog_posts (
   id,
   slug,
