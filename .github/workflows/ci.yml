@@ -3,10 +3,13 @@ name: CI & Build Validation
 on:
   push:
     branches:
+      - develop
+      - release
       - main
-      - preview
   pull_request:
     branches:
+      - develop
+      - release
       - main
 
 jobs:
