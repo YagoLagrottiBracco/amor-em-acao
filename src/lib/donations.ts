@@ -8,6 +8,8 @@ import type {
 interface SupabaseDonationRow {
   id: string;
   stripe_session_id: string | null;
+  stripe_customer_id?: string | null;
+  stripe_subscription_id?: string | null;
   donor_name: string | null;
   donor_email: string | null;
   amount_cents: number;
@@ -27,6 +29,8 @@ function rowToDonation(row: SupabaseDonationRow): DonationRecord {
   return {
     id: row.id,
     stripeSessionId: row.stripe_session_id,
+    stripeCustomerId: row.stripe_customer_id || null,
+    stripeSubscriptionId: row.stripe_subscription_id || null,
     donorName: row.donor_name,
     donorEmail: row.donor_email,
     amountCents: row.amount_cents,
@@ -78,6 +82,8 @@ export async function createDonationRecord(
   const record: DonationRecord = {
     id: input.id || `don-${Date.now()}`,
     stripeSessionId: input.stripeSessionId ?? null,
+    stripeCustomerId: input.stripeCustomerId ?? null,
+    stripeSubscriptionId: input.stripeSubscriptionId ?? null,
     donorName: input.donorName ?? null,
     donorEmail: input.donorEmail ?? null,
     amountCents: input.amountCents,
@@ -97,6 +103,8 @@ export async function createDonationRecord(
       .from("donations")
       .insert({
         stripe_session_id: record.stripeSessionId,
+        stripe_customer_id: record.stripeCustomerId,
+        stripe_subscription_id: record.stripeSubscriptionId,
         donor_name: record.donorName,
         donor_email: record.donorEmail,
         amount_cents: record.amountCents,
@@ -121,6 +129,8 @@ export async function createDonationRecord(
 export async function updateDonationBySessionOrId(params: {
   id?: string;
   stripeSessionId?: string;
+  stripeCustomerId?: string | null;
+  stripeSubscriptionId?: string | null;
   status?: DonationStatus;
   donorName?: string | null;
   donorEmail?: string | null;
@@ -132,6 +142,10 @@ export async function updateDonationBySessionOrId(params: {
   if (supabase) {
     const patch: Record<string, unknown> = { updated_at: now };
     if (params.status) patch.status = params.status;
+    if (params.stripeCustomerId !== undefined)
+      patch.stripe_customer_id = params.stripeCustomerId;
+    if (params.stripeSubscriptionId !== undefined)
+      patch.stripe_subscription_id = params.stripeSubscriptionId;
     if (params.donorName !== undefined) patch.donor_name = params.donorName;
     if (params.donorEmail !== undefined) patch.donor_email = params.donorEmail;
     if (params.notes !== undefined) patch.notes = params.notes;
@@ -157,6 +171,12 @@ export async function updateDonationBySessionOrId(params: {
   memoryDonations[idx] = {
     ...memoryDonations[idx],
     ...(params.status ? { status: params.status } : {}),
+    ...(params.stripeCustomerId !== undefined
+      ? { stripeCustomerId: params.stripeCustomerId }
+      : {}),
+    ...(params.stripeSubscriptionId !== undefined
+      ? { stripeSubscriptionId: params.stripeSubscriptionId }
+      : {}),
     ...(params.donorName !== undefined ? { donorName: params.donorName } : {}),
     ...(params.donorEmail !== undefined
       ? { donorEmail: params.donorEmail }

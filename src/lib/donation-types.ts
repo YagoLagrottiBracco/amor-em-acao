@@ -4,6 +4,8 @@ export type DonationFrequency = "once" | "monthly";
 export interface DonationRecord {
   id: string;
   stripeSessionId?: string | null;
+  stripeCustomerId?: string | null;
+  stripeSubscriptionId?: string | null;
   donorName?: string | null;
   donorEmail?: string | null;
   amountCents: number;
