@@ -49,7 +49,7 @@ O projeto adota uma estratégia estrita de dois ramos no GitHub:
 - **Estilização:** Tailwind CSS v4 + FontAwesome 6 + Google Fonts (`DM Sans` e `Manrope`)
 - **Banco de Dados & Storage:** Supabase (PostgreSQL + RLS + Storage)
 - **Meios de Pagamento:** Stripe Checkout (Doações pontuais e recorrentes sem necessidade de webhooks complexos)
-- **Editor WYSIWYG de Blog:** `@milkdown/crepe` (mesmo padrão editorial do portfólio)
+- **Editor WYSIWYG de Blog:** `@milkdown/crepe` (mesmo padrão editorial do portfólio)retomavenda
 - **SEO & Dados Estruturados:** Schema.org JSON-LD (`NGO`, `WebSite`, `Article`, `ItemList`, `BreadcrumbList`)
 
 ---
