@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import {
   SITE_CONFIG,
@@ -11,16 +11,21 @@ import { DonateProvider } from "@/components/DonateContext";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+// Self-hosted Google Fonts (variable, latin subset, SIL OFL 1.1 — see src/fonts).
+// Bundling the files avoids fetching fonts.googleapis.com at build time, which
+// can fail on Vercel build machines when Google returns an unexpected response.
+const dmSans = localFont({
+  src: "../fonts/dm-sans-latin-wght.woff2",
+  weight: "400 800",
+  style: "normal",
   variable: "--font-dm-sans",
   display: "swap",
 });
 
-const manrope = Manrope({
-  subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
+const manrope = localFont({
+  src: "../fonts/manrope-latin-wght.woff2",
+  weight: "500 800",
+  style: "normal",
   variable: "--font-manrope",
   display: "swap",
 });
