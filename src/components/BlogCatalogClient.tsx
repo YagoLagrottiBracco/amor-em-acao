@@ -40,14 +40,15 @@ export function BlogCatalogClient({
       {/* Barra de busca e filtro por categoria */}
       <div className="soft-card p-5 md:p-6 mb-10 flex flex-col lg:flex-row gap-4 items-stretch lg:items-center justify-between">
         <div className="relative flex-grow max-w-xl">
-          <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" />
+          <i className="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 pointer-events-none" />
           <input
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Buscar por tema, região, palavra-chave..."
             aria-label="Buscar artigos no blog"
-            className="form-field pl-11"
+            className="form-field text-sm !pl-11"
+            style={{ paddingLeft: "2.75rem" }}
           />
         </div>
 
@@ -106,22 +107,6 @@ export function BlogCatalogClient({
           ))}
         </div>
       )}
-
-      {/* Barra discreta para o administrador */}
-      <div className="mt-14 pt-8 border-t border-orange-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
-        <p>
-          Todos os artigos são estruturados com dados semânticos Schema.org (
-          <code>BlogPosting</code> e <code>FAQPage</code>) para indexação no
-          Google.
-        </p>
-        <Link
-          href="/admin/blog"
-          className="inline-flex items-center gap-2 bg-white border border-orange-200 text-orange-800 font-extrabold px-4 py-2.5 rounded-xl hover:bg-orange-50 transition shrink-0"
-        >
-          <i className="fa-solid fa-pen-to-square" />
-          Painel Admin: Criar / Editar Cards e Artigos
-        </Link>
-      </div>
     </div>
   );
 }

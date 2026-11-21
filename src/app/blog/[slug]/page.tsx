@@ -65,7 +65,7 @@ export default async function BlogPostPage({
 
   const breadcrumbSchema = getBreadcrumbJsonLd([
     { name: "Início", path: "/" },
-    { name: "Blog", path: "/blog" },
+    { name: "Notícias", path: "/blog" },
     { name: post.title, path: `/blog/${post.slug}` },
   ]);
 

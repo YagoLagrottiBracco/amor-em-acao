@@ -53,8 +53,9 @@ Portal institucional completo, sistema de gestão de missões comunitárias com 
   - Modo leitura focado e âncoras permanentes por parágrafo.
 - **Zero "Mock Lixo":** Todos os dados operam de forma 100% dinâmica via Supabase.
 
-### 4. Doações (Stripe Checkout & Registro Direto)
-- Doações pontuais e mensais recorrentes integradas com Stripe.
+### 4. Doações (Stripe Checkout & Portal de Autonomia do Doador)
+- Doações pontuais (únicas) e mensais recorrentes integradas com Stripe.
+- **Portal de Autonomia do Doador (`/doacao/gerenciar`)**: Integração com o **Stripe Customer Portal** permitindo que doadores recorrentes gerenciem sua própria assinatura mensal (atualizar cartão de crédito, baixar recibos/faturas ou cancelar a qualquer momento sem burocracia).
 - **Sem necessidade de webhooks complexos:** status do pagamento consultado e gravado automaticamente no retorno para `/doacao/sucesso` ou via botão **"Verificar no Stripe"** no painel administrativo.
 - Registro manual de doações recebidas via Pix ou transferência bancária.
 
@@ -65,9 +66,8 @@ Portal institucional completo, sistema de gestão de missões comunitárias com 
 
 ### 6. Autenticação Administrativa Segura (`/admin`)
 - Proteção por cookie seguro de sessão (`HttpOnly`, assinado com HMAC-SHA256).
-- Autenticação flexível:
-  - Via **Supabase Auth** (usuários cadastrados em `Authentication -> Users`).
-  - Via variáveis de ambiente (`ADMIN_EMAIL` e `ADMIN_PASSWORD`) configuradas na Vercel.
+- Autenticação exclusiva via **Supabase Auth** (`supabase.auth.signInWithPassword`).
+- Criação e atualização de administrador via script SQL idempotente [`supabase/create_admin.sql`](./supabase/create_admin.sql) ou diretamente pelo painel do Supabase (`Authentication -> Users`).
 
 ---
 
@@ -116,6 +116,7 @@ npm install
 1. Crie um projeto no [Supabase](https://supabase.com/).
 2. Abra o **SQL Editor** no painel do Supabase.
 3. Execute o script contido em [`supabase/schema.sql`](./supabase/schema.sql). Ele criará as tabelas `blog_posts`, `action_missions`, `transparency_documents`, `donations`, `volunteers`, os índices e as políticas de segurança RLS.
+4. Execute o script contido em [`supabase/create_admin.sql`](./supabase/create_admin.sql) para criar o usuário administrador no Supabase Auth com e-mail confirmado (ou crie manualmente pelo painel em *Authentication &rarr; Users*).
 
 ### 3. Variáveis de Ambiente
 
@@ -124,12 +125,12 @@ Crie o arquivo `.env.local` na raiz com base no [`.env.example`](./.env.example)
 ```env
 NEXT_PUBLIC_SITE_URL=https://amoremacao.org
 
+# Supabase (suporta tanto as novas Publishable/Secret Keys quanto as legadas Anon/Service Role)
 NEXT_PUBLIC_SUPABASE_URL=https://seu-projeto.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=sua_anon_key
-SUPABASE_SERVICE_ROLE_KEY=sua_service_role_key
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+SUPABASE_SECRET_KEY=sb_secret_...
+# (Ou caso utilize as chaves legadas: NEXT_PUBLIC_SUPABASE_ANON_KEY e SUPABASE_SERVICE_ROLE_KEY)
 
-ADMIN_EMAIL=admin@amoremacao.org.br
-ADMIN_PASSWORD=sua_senha_forte
 ADMIN_SESSION_SECRET=segredo_hmac_longo_para_assinatura_de_cookies
 
 STRIPE_SECRET_KEY=sk_live_...

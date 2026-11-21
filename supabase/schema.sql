@@ -40,6 +40,8 @@ create index if not exists idx_blog_posts_featured on public.blog_posts (feature
 create table if not exists public.donations (
   id uuid primary key default gen_random_uuid(),
   stripe_session_id text unique,
+  stripe_customer_id text,
+  stripe_subscription_id text,
   donor_name text,
   donor_email text,
   amount_cents integer not null check (amount_cents > 0),
@@ -56,6 +58,8 @@ create table if not exists public.donations (
 create index if not exists idx_donations_created_at on public.donations (created_at desc);
 create index if not exists idx_donations_status on public.donations (status);
 create index if not exists idx_donations_stripe_session on public.donations (stripe_session_id);
+create index if not exists idx_donations_stripe_customer on public.donations (stripe_customer_id);
+create index if not exists idx_donations_stripe_subscription on public.donations (stripe_subscription_id);
 
 -- 3. Tabela de Voluntários (inscrições do formulário de voluntariado)
 create table if not exists public.volunteers (

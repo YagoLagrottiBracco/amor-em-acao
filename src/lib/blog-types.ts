@@ -18,11 +18,11 @@ export interface BlogPost {
   slug: string;
   title: string;
   excerpt: string;
-  /** Texto exibido no "pill" (badge arredondado) no canto superior esquerdo da foto do card */
+  /** Text displayed on the pill badge in the top-left corner of the card image */
   pillText: string;
-  /** Texto exibido no botão de chamada para ação (CTA) no rodapé do card */
+  /** Call to action (CTA) button text on the card footer */
   buttonText: string;
-  /** Link opcional customizado; se vazio, aponta automaticamente para /blog/[slug] */
+  /** Optional custom URL; defaults to /blog/[slug] */
   customLink?: string;
   coverImage: string;
   coverImageAlt: string;
@@ -36,7 +36,7 @@ export interface BlogPost {
   updatedAt: string;
   readingTimeMinutes: number;
   featured: boolean;
-  /** Se verdadeiro, fica salvo como rascunho no painel admin e oculto nas páginas públicas */
+  /** When true, saved as draft in admin and hidden from public pages */
   draft?: boolean;
   seoTitle: string;
   seoDescription: string;

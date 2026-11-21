@@ -15,9 +15,9 @@ function isAuthorized(request: NextRequest): boolean {
 }
 
 /**
- * Converte quaisquer imagens estagiadas no editor WYSIWYG (`blog-asset://<id>`)
- * em URLs limpas do Supabase Storage (ou Data URLs caso o Storage ainda não esteja ativo)
- * diretamente dentro do Markdown do artigo, sem deixar objetos temporários no banco.
+ * Converts staged images from the WYSIWYG editor (`blog-asset://<id>`)
+ * into persistent Supabase Storage URLs (or Data URLs if storage is unconfigured)
+ * directly within the post Markdown, leaving zero orphan objects in the database.
  */
 async function replaceStagedAssetsInContent(
   rawContent: string,
@@ -55,7 +55,7 @@ async function replaceStagedAssetsInContent(
           }
         }
       } catch {
-        // Fallback para Data URL caso o bucket não exista
+        // Fallback to Data URL if storage bucket does not exist
       }
     }
 

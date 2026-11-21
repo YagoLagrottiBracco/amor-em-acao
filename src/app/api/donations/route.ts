@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
     const body = await request.json();
 
-    // Ação opcional: Verificar uma sessão diretamente na API do Stripe (sem webhook)
+    // Optional action: verify a session directly via Stripe API (webhook-less)
     if (body.action === "verify_stripe" && body.stripeSessionId) {
       const secretKey = process.env.STRIPE_SECRET_KEY;
       if (!secretKey || secretKey.includes("sua_chave_secreta_aqui")) {
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Registro manual de doação (Pix, transferência bancária ou Stripe manual)
+    // Manual donation registration (Pix, bank transfer, or manual Stripe)
     const amountBRL = Number(body.amountBRL);
     if (!amountBRL || Number.isNaN(amountBRL) || amountBRL <= 0) {
       return NextResponse.json(

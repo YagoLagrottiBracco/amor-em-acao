@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { buildMetadata, getBreadcrumbJsonLd } from "@/lib/seo";
+import { buildMetadata, getBreadcrumbJsonLd, getFaqJsonLd } from "@/lib/seo";
 import { getAllTransparencyDocsAsync } from "@/lib/transparency";
 import {
   TRANSPARENCY_CATEGORY_LABELS,
@@ -10,20 +10,46 @@ import {
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Transparência e Prestação de Contas (CNPJ 21.960.082/0001-96) | Amor em Ação",
+  title:
+    "Transparência e Prestação de Contas (CNPJ 21.960.082/0001-96) | Amor em Ação",
   description:
-    "Consulte os dados cadastrais públicos da Associação Humanitária Amor em Ação (CNPJ 21.960.082/0001-96), estatuto, relatórios de atividades, balanços e fontes externas verificadas.",
+    "Consulte os dados cadastrais públicos da Associação Humanitária Amor em Ação (CNPJ 21.960.082/0001-96), estatuto social, relatórios de atividades, balanços e fontes públicas.",
   path: "/transparencia",
   image: "/images/casa-amarela-convivencia-afeto.jpg",
-  imageAlt: "Transparência e compromisso público — Associação Humanitária Amor em Ação",
+  imageAlt:
+    "Transparência e compromisso público — Associação Humanitária Amor em Ação",
   keywords: [
     "transparência Amor em Ação",
     "CNPJ 21.960.082/0001-96",
     "Associação Humanitária Amor em Ação transparência",
     "prestação de contas ONG",
     "balanço social terceiro setor",
+    "estatuto social ONG",
   ],
 });
+
+const TRANSPARENCIA_FAQS = [
+  {
+    question: "Qual é a razão social e CNPJ oficial da instituição?",
+    answer:
+      "A razão social registrada é Associação Humanitária Amor em Ação, inscrita sob o CNPJ nº 21.960.082/0001-96, com sede em Jardim Gramacho, Duque de Caxias/RJ.",
+  },
+  {
+    question: "Onde são publicados os relatórios de atividades e balanços?",
+    answer:
+      "Todos os documentos comprobatórios, atas e relatórios de atividades são organizados nas categorias deste Portal da Transparência, com acesso livre a qualquer cidadão.",
+  },
+  {
+    question: "Como as doações recebidas são aplicadas nos projetos?",
+    answer:
+      "Os recursos são revertidos prioritariamente para o fornecimento de alimentação diária, manutenção da infraestrutura da Casa Amarela, materiais escolares para as oficinas infantis e apoio a ações humanitárias no Nordeste e no Malawi.",
+  },
+  {
+    question: "Como posso verificar a idoneidade da organização?",
+    answer:
+      "Além da consulta cadastral direta junto à Receita Federal pelo CNPJ 21.960.082/0001-96, disponibilizamos links de fontes públicas e registros de atuação contínua acompanhados pela comunidade de Jardim Gramacho.",
+  },
+];
 
 export default async function TransparenciaPage() {
   const { documents } = await getAllTransparencyDocsAsync({
@@ -34,6 +60,7 @@ export default async function TransparenciaPage() {
     { name: "Início", path: "/" },
     { name: "Transparência", path: "/transparencia" },
   ]);
+  const faqSchema = getFaqJsonLd(TRANSPARENCIA_FAQS);
 
   const categoriesOrder: TransparencyCategory[] = [
     "institucional",
@@ -52,6 +79,10 @@ export default async function TransparenciaPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="bg-[#29231f] text-white">
@@ -213,6 +244,35 @@ export default async function TransparenciaPage() {
           pela diretoria da Associação Humanitária Amor em Ação. As fontes externas
           citadas são reportagens e registros públicos de terceiros documentando
           visitas, coberturas jornalísticas e apoios comunitários prestados.
+        </div>
+
+        {/* FAQ TRANSPARÊNCIA */}
+        <div className="pt-6">
+          <div className="text-center max-w-2xl mx-auto mb-8">
+            <p className="section-kicker">Perguntas sobre auditoria</p>
+            <h2 className="display text-3xl font-extrabold mt-2 text-stone-900">
+              Dúvidas sobre Transparência e Prestação de Contas
+            </h2>
+          </div>
+
+          <div className="space-y-4 max-w-4xl mx-auto">
+            {TRANSPARENCIA_FAQS.map((faq, idx) => (
+              <details
+                key={idx}
+                className="group bg-white rounded-2xl p-6 border border-stone-200/80 shadow-sm transition hover:border-orange-300"
+              >
+                <summary className="font-extrabold text-stone-900 cursor-pointer list-none flex justify-between items-center gap-4 text-base md:text-lg">
+                  <span>{faq.question}</span>
+                  <span className="w-8 h-8 rounded-full bg-orange-50 text-orange-600 grid place-items-center shrink-0 group-open:rotate-180 transition-transform">
+                    <i className="fa-solid fa-chevron-down text-xs" />
+                  </span>
+                </summary>
+                <p className="mt-4 text-stone-600 leading-relaxed text-sm md:text-base border-t border-stone-100 pt-4">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
+          </div>
         </div>
       </div>
     </section>

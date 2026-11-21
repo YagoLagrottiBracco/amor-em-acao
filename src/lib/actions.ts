@@ -355,7 +355,7 @@ function rowToAction(row: any): ActionMission {
 }
 
 /**
- * Retorna todas as missões (ou apenas as publicadas para visitantes).
+ * Returns all missions (or only published ones for public visitors).
  */
 export async function getAllActionsAsync({
   includeDrafts = false,
@@ -382,7 +382,7 @@ export async function getAllActionsAsync({
         };
       }
 
-      // Se a tabela no Supabase estiver vazia, sincroniza as 3 ações iniciais padrão
+      // If Supabase table is empty, seed with the 3 default initial missions
       if (!error && data && data.length === 0) {
         for (const mission of DEFAULT_ACTION_MISSIONS) {
           await supabase.from("action_missions").insert({
@@ -409,7 +409,7 @@ export async function getAllActionsAsync({
         };
       }
     } catch {
-      // Ignorar e usar local
+      // Ignore and fallback to local store
     }
   }
 
@@ -427,7 +427,7 @@ export async function getAllActionsAsync({
 }
 
 /**
- * Retorna exatamente as 3 ações mais recentes adicionadas para exibição no dropdown "Nossas ações"
+ * Returns recent actions/missions for header navigation dropdown
  */
 export async function getRecentNavActionsAsync(
   limit = 3
@@ -447,7 +447,7 @@ export async function getRecentNavActionsAsync(
 }
 
 /**
- * Busca uma ação individual pelo slug
+ * Finds an individual action/mission by unique slug
  */
 export async function getActionBySlugAsync(
   slug: string
@@ -466,7 +466,7 @@ export async function getActionBySlugAsync(
         return rowToAction(data);
       }
     } catch {
-      // Ignorar
+      // Fallback to local store on error
     }
   }
 
@@ -477,7 +477,7 @@ export async function getActionBySlugAsync(
 }
 
 /**
- * Cria ou atualiza uma ação/missão
+ * Create or update an action/mission
  */
 export async function upsertActionAsync(
   payload: Partial<ActionMission> & { title: string; slug: string }
@@ -540,7 +540,7 @@ export async function upsertActionAsync(
         };
       }
     } catch {
-      // Ignorar e salvar local
+      // Fallback and persist in local store
     }
   }
 
@@ -561,7 +561,7 @@ export async function upsertActionAsync(
 }
 
 /**
- * Remove uma ação pelo ID
+ * Delete an action by ID
  */
 export async function deleteActionAsync(
   id: string
@@ -577,7 +577,7 @@ export async function deleteActionAsync(
         return { success: true, storage: "supabase" };
       }
     } catch {
-      // Ignorar
+      // Fallback to local deletion on error
     }
   }
 

@@ -63,7 +63,7 @@ export interface GalleryBlockData {
 
 export interface CardItemData {
   id: string;
-  icon: string; // FontAwesome, ex: "fa-utensils", "fa-hands-holding-child"
+  icon: string; // FontAwesome icon class, e.g. "fa-utensils", "fa-hands-holding-child"
   title: string;
   description: string;
 }
@@ -145,14 +145,14 @@ export interface ActionMission {
   id: string;
   slug: string;
   title: string;
-  /** Subtítulo curto exibido logo abaixo do título no dropdown "Nossas ações" */
+  /** Short subtitle displayed directly below title in header actions dropdown */
   navSubtitle: string;
   kicker: string;
   description: string;
   coverImage: string;
   coverImageAlt: string;
   status: "published" | "draft";
-  /** Define se entra no rodízio do dropdown de ações no cabeçalho */
+  /** Determines if this mission is eligible for header navigation dropdown */
   featuredInNav: boolean;
   createdAt: string;
   updatedAt: string;

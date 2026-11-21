@@ -144,7 +144,7 @@ export async function getAllTransparencyDocsAsync({
         };
       }
     } catch {
-      // Ignorar e usar local
+      // Fallback to local store
     }
   }
 
@@ -216,7 +216,7 @@ export async function upsertTransparencyDocAsync(
         };
       }
     } catch {
-      // Ignorar
+      // Fallback to local store on error
     }
   }
 
@@ -249,7 +249,7 @@ export async function deleteTransparencyDocAsync(
         return { success: true, storage: "supabase" };
       }
     } catch {
-      // Ignorar
+      // Fallback to local deletion on error
     }
   }
 

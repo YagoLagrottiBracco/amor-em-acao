@@ -5,9 +5,9 @@ export interface ActionBlogCardProps {
   description: string;
   image: string;
   imageAlt: string;
-  /** Texto exibido no "pill" branco no canto superior esquerdo da imagem */
+  /** Text displayed on the white pill badge in the top-left corner of the image */
   pillText: string;
-  /** Texto customizável exibido no botão/link inferior com a seta */
+  /** Customizable button/link label displayed at the bottom with arrow */
   buttonText: string;
   href: string;
   external?: boolean;

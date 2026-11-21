@@ -404,7 +404,7 @@ export function ActionMissionBuilder({
         await onRefresh();
       }
     } catch {
-      // Ignorar
+      // Ignore error and retain current state
     }
   }
 

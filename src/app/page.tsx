@@ -5,14 +5,48 @@ import {
   HeroButtons,
   ImpactCalculator,
 } from "@/components/HomeClientWidgets";
+import { getFaqJsonLd } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
+const HOME_FAQS = [
+  {
+    question: "O que é a Associação Humanitária Amor em Ação e qual sua missão?",
+    answer:
+      "A Associação Humanitária Amor em Ação (CNPJ 21.960.082/0001-96) é uma organização sem fins lucrativos dedicada a servir pessoas em situação de extrema vulnerabilidade social e pobreza. Promovemos acolhimento infantil, alimentação diária, dignidade, apoio pedagógico e oportunidades de futuro.",
+  },
+  {
+    question: "O que é a Casa Amarela em Jardim Gramacho?",
+    answer:
+      "A Casa Amarela é o polo comunitário da Amor em Ação no bairro de Jardim Gramacho, em Duque de Caxias/RJ. O espaço oferece às crianças banho diário, alimentação nutritiva, reforço escolar, oficinas pedagógicas, recreação e convivência afetuosa em um ambiente seguro.",
+  },
+  {
+    question: "Quais são as outras frentes de atuação além de Jardim Gramacho?",
+    answer:
+      "Além da Baixada Fluminense, a Amor em Ação realiza projetos comunitários no sertão nordestino brasileiro (em Matões do Norte/MA) com suporte às famílias, e apoia missões humanitárias internacionais no Malawi (África), viabilizando poços artesianos para água potável e reformas escolares.",
+  },
+  {
+    question: "Como posso doar e apoiar os projetos da Amor em Ação?",
+    answer:
+      "Você pode realizar doações seguras e diretas pelo nosso site com cartão de crédito via Stripe Checkout (doações únicas ou mensais recorrentes) ou via PIX institucional. Cada recurso é aplicado com transparência pública e prestação de contas.",
+  },
+  {
+    question: "Como funciona o voluntariado na instituição?",
+    answer:
+      "Recebemos voluntários para atuação presencial em nossas ações comunitárias e eventos, e voluntários remotos em áreas como comunicação, design, captação e suporte administrativo. Acesse a página 'Seja voluntário' para registrar seu interesse.",
+  },
+];
+
 export default async function HomePage() {
   const featuredPosts = await getFeaturedBlogPostsAsync(3);
+  const faqSchema = getFaqJsonLd(HOME_FAQS);
 
   return (
     <div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       {/* HERO */}
       <div className="relative overflow-hidden bg-[#29231f] text-white">
         <div className="absolute inset-0 hero-pattern opacity-70" />
@@ -202,7 +236,7 @@ export default async function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
               <div className="max-w-2xl">
-                <p className="section-kicker">Blog e Artigos</p>
+                <p className="section-kicker">Notícias e Artigos</p>
                 <h2 className="display text-3xl md:text-4xl font-extrabold mt-3">
                   Histórias, transparência e impacto social
                 </h2>
@@ -217,7 +251,7 @@ export default async function HomePage() {
                   href="/blog"
                   className="bg-orange-50 hover:bg-orange-100 text-orange-800 font-extrabold text-sm px-5 py-3 rounded-xl transition"
                 >
-                  Ver todos os artigos{" "}
+                  Ver todas as notícias{" "}
                   <i className="fa-solid fa-arrow-right ml-1.5" />
                 </Link>
               </div>
@@ -256,6 +290,41 @@ export default async function HomePage() {
         </div>
 
         <ImpactCalculator />
+      </section>
+
+      {/* PERGUNTAS FREQUENTES (FAQ COM SCHEMA.ORG PARA SEO NO GOOGLE) */}
+      <section className="bg-[#fffaf5] border-t border-orange-100 py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <p className="section-kicker">Tire suas dúvidas</p>
+            <h2 className="display text-3xl md:text-4xl font-extrabold mt-2 text-stone-900">
+              Perguntas Frequentes sobre a Amor em Ação
+            </h2>
+            <p className="text-stone-600 mt-3 text-sm">
+              Entenda como operamos, como os recursos são aplicados e de que
+              maneiras você pode fazer a diferença na vida das nossas crianças.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            {HOME_FAQS.map((faq, idx) => (
+              <details
+                key={idx}
+                className="group bg-white rounded-2xl p-6 border border-stone-200/80 shadow-sm transition hover:border-orange-300"
+              >
+                <summary className="font-extrabold text-stone-900 cursor-pointer list-none flex justify-between items-center gap-4 text-base md:text-lg">
+                  <span>{faq.question}</span>
+                  <span className="w-8 h-8 rounded-full bg-orange-50 text-orange-600 grid place-items-center shrink-0 group-open:rotate-180 transition-transform">
+                    <i className="fa-solid fa-chevron-down text-xs" />
+                  </span>
+                </summary>
+                <p className="mt-4 text-stone-600 leading-relaxed text-sm md:text-base border-t border-stone-100 pt-4">
+                  {faq.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
       </section>
     </div>
   );

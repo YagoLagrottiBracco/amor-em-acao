@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllActionsAsync } from "@/lib/actions";
-import { buildMetadata, getBreadcrumbJsonLd } from "@/lib/seo";
+import {
+  buildMetadata,
+  getBreadcrumbJsonLd,
+  getItemListJsonLd,
+} from "@/lib/seo";
 import { ActionBlogCard } from "@/components/ActionBlogCard";
 
 export const dynamic = "force-dynamic";
@@ -30,11 +34,26 @@ export default async function AcoesCatalogPage() {
     { name: "Nossas Ações", path: "/acoes" },
   ]);
 
+  const itemListSchema = getItemListJsonLd(
+    "Nossas Ações Comunitárias e Missões — Amor em Ação",
+    "Catálogo oficial das iniciativas comunitárias e frentes de atuação social da Associação Humanitária Amor em Ação.",
+    actions.map((action) => ({
+      name: action.title,
+      path: `/acoes/${action.slug}`,
+      description: action.description,
+      image: action.coverImage,
+    }))
+  );
+
   return (
     <section id="page-acoes" className="min-h-screen bg-[#fffaf5] pb-24">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
       />
 
       {/* Hero */}

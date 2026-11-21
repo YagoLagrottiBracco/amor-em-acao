@@ -141,7 +141,7 @@ export function TransparencyManager({
         await onRefresh();
       }
     } catch {
-      // Ignorar
+      // Ignore error and retain state
     }
   }
 
@@ -157,7 +157,7 @@ export function TransparencyManager({
       });
       await onRefresh();
     } catch {
-      // Ignorar
+      // Ignore error and retain state
     }
   }
 

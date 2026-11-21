@@ -3,14 +3,14 @@ import { NextRequest } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
 export const ADMIN_COOKIE_NAME = "amor_em_acao_admin_session";
-const SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 7; // 7 dias
+const SESSION_DURATION_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
 
 function getSigningSecret(): string {
   return (
     process.env.ADMIN_SESSION_SECRET ||
+    process.env.SUPABASE_SECRET_KEY ||
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.ADMIN_PASSWORD ||
-    process.env.ADMIN_API_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
     "amor-em-acao-fallback-signing-key-2026"
   );
@@ -74,26 +74,12 @@ export function getAdminSessionFromRequest(
   request: NextRequest
 ): AdminSessionPayload | null {
   const cookieToken = request.cookies.get(ADMIN_COOKIE_NAME)?.value;
-  const session = verifySessionToken(cookieToken);
-  if (session) return session;
-
-  // Suporte adicional a chave via header (caso usado por script)
-  const expectedKey = process.env.ADMIN_PASSWORD || process.env.ADMIN_API_KEY;
-  const headerKey = request.headers.get("x-admin-key");
-  if (expectedKey && headerKey && headerKey === expectedKey) {
-    return {
-      email: process.env.ADMIN_EMAIL || "admin@amoremacao.org.br",
-      exp: Date.now() + 60000,
-    };
-  }
-
-  return null;
+  return verifySessionToken(cookieToken);
 }
 
 /**
- * Valida credenciais humanas de login:
- * 1) Verifica se batem com ADMIN_EMAIL + ADMIN_PASSWORD (ou ADMIN_API_KEY) das variáveis de ambiente;
- * 2) Caso contrário, autentica diretamente no Supabase Auth (`signInWithPassword`).
+ * Validates admin credentials exclusively against Supabase Auth (`signInWithPassword`).
+ * Administrators are provisioned directly in Supabase (Authentication -> Users or supabase/create_admin.sql).
  */
 export async function authenticateAdminCredentials(
   email: string,
@@ -106,51 +92,47 @@ export async function authenticateAdminCredentials(
     return { ok: false, error: "Informe seu e-mail e sua senha." };
   }
 
-  const envPassword =
-    process.env.ADMIN_PASSWORD?.trim() || process.env.ADMIN_API_KEY?.trim();
-  const envEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
-
-  // 1. Checa credenciais configuradas via variáveis de ambiente
-  if (envPassword) {
-    const emailMatches = !envEmail || envEmail === cleanEmail;
-    if (emailMatches && cleanPass === envPassword) {
-      return { ok: true, email: cleanEmail };
-    }
-  }
-
-  // 2. Checa autenticação via Supabase Auth (usuário criado em Authentication -> Users no Supabase)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
   const supabaseKey =
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim() ||
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim() ||
+    process.env.SUPABASE_SECRET_KEY?.trim() ||
     process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
 
-  if (supabaseUrl && supabaseKey) {
-    try {
-      const authClient = createClient(supabaseUrl, supabaseKey, {
-        auth: { persistSession: false, autoRefreshToken: false },
-      });
-      const { data, error } = await authClient.auth.signInWithPassword({
-        email: cleanEmail,
-        password: cleanPass,
-      });
-      if (!error && data?.user?.email) {
-        return { ok: true, email: data.user.email };
-      }
-    } catch {
-      // Continua para mensagem de erro padrão
-    }
-  }
-
-  if (!envPassword && (!supabaseUrl || !supabaseKey)) {
+  if (!supabaseUrl || !supabaseKey) {
     return {
       ok: false,
       error:
-        "Configure um usuário no Supabase Auth (Authentication > Users) ou defina ADMIN_EMAIL e ADMIN_PASSWORD nas variáveis de ambiente da Vercel.",
+        "Supabase não configurado. Verifique as chaves NEXT_PUBLIC_SUPABASE_URL e NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY (ou NEXT_PUBLIC_SUPABASE_ANON_KEY).",
     };
   }
 
-  return {
-    ok: false,
-    error: "E-mail ou senha inválidos. Verifique suas credenciais de administrador.",
-  };
+  try {
+    const authClient = createClient(supabaseUrl, supabaseKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data, error } = await authClient.auth.signInWithPassword({
+      email: cleanEmail,
+      password: cleanPass,
+    });
+
+    if (error || !data?.user?.email) {
+      return {
+        ok: false,
+        error:
+          "E-mail ou senha inválidos. Verifique as credenciais cadastradas.",
+      };
+    }
+
+    return { ok: true, email: data.user.email };
+  } catch (err) {
+    const message =
+      err instanceof Error
+        ? err.message
+        : "Erro ao autenticar.";
+    return {
+      ok: false,
+      error: message,
+    };
+  }
 }

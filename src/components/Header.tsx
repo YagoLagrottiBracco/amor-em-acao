@@ -54,7 +54,7 @@ export function Header() {
           setTotalActionsCount(data.totalCount);
         }
       } catch {
-        // Usa as iniciais com segurança
+        // Silently fallback to default initial actions
       }
     }
     void fetchNavActions();
@@ -171,7 +171,7 @@ export function Header() {
                 isActive("/blog") ? "active" : ""
               }`}
             >
-              Blog
+              Notícias
             </Link>
 
             <Link
@@ -273,7 +273,7 @@ export function Header() {
             onClick={() => setMobileMenuOpen(false)}
             className="mobile-link"
           >
-            Blog
+            Notícias
           </Link>
           <Link
             href="/contato"

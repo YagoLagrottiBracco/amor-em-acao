@@ -57,7 +57,7 @@ export function BlogArticleView({
           </Link>
           <span aria-hidden="true">/</span>
           <Link href="/blog" className="hover:text-orange-700 transition">
-            Blog &amp; Ações
+            Notícias
           </Link>
           <span aria-hidden="true">/</span>
           <span className="text-stone-800 font-semibold truncate max-w-xs sm:max-w-md">
