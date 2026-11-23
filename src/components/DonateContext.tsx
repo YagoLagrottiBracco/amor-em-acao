@@ -232,12 +232,21 @@ export function DonateProvider({ children }: { children: React.ReactNode }) {
                 </button>
               </div>
 
-              {frequency === "subscription" && (
+              {frequency === "payment" ? (
+                <div className="flex items-center gap-2 p-2.5 bg-emerald-50/90 border border-emerald-200 rounded-xl text-[11px] text-emerald-950 font-medium">
+                  <i className="fa-brands fa-pix text-emerald-600 shrink-0" />
+                  <span>
+                    Pague com <b>PIX</b> ou <b>cartão de crédito</b>. O QR Code
+                    do PIX é exibido na próxima etapa.
+                  </span>
+                </div>
+              ) : (
                 <div className="flex items-center gap-2 p-2.5 bg-orange-50/90 border border-orange-200 rounded-xl text-[11px] text-orange-950 font-medium">
                   <i className="fa-solid fa-repeat text-orange-600 shrink-0" />
                   <span>
-                    Contribuição mensal recorrente. Você terá total liberdade
-                    para atualizar o cartão ou cancelar a qualquer momento.
+                    Contribuição mensal recorrente, somente com{" "}
+                    <b>cartão de crédito</b>. Você terá total liberdade para
+                    atualizar o cartão ou cancelar a qualquer momento.
                   </span>
                 </div>
               )}
@@ -376,8 +385,8 @@ export function DonateProvider({ children }: { children: React.ReactNode }) {
                 Nota de transparência
               </p>
               <p className="text-xs text-amber-900 mt-1 leading-relaxed">
-                O pagamento online é processado de forma criptografada via{" "}
-                <b>Stripe</b>. Para doações diretas ou confirmação de dados
+                O pagamento online (PIX ou cartão) é processado de forma
+                criptografada via <b>Stripe</b>. Para doações diretas ou confirmação de dados
                 bancários oficiais, consulte o perfil público da associação.
               </p>
             </div>

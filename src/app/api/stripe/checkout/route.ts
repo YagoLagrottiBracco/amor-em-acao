@@ -51,9 +51,13 @@ export async function POST(request: NextRequest) {
 
     const unitAmountCents = Math.round(rawAmount * 100);
 
-    const session = await stripe.checkout.sessions.create({
+    // One-time donations accept Pix and card; recurring donations are card-only
+    // because one-off Pix cannot back a Stripe subscription.
+    const paymentMethodTypes: Stripe.Checkout.SessionCreateParams.PaymentMethodType[] =
+      frequency === "payment" ? ["card", "pix"] : ["card"];
+
+    const baseParams: Stripe.Checkout.SessionCreateParams = {
       mode: frequency,
-      payment_method_types: ["card"],
       locale: "pt-BR",
       customer_email: donorEmail || undefined,
       line_items: [
@@ -87,7 +91,36 @@ export async function POST(request: NextRequest) {
       },
       success_url: `${origin}/doacao/sucesso?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/doacao/cancelada`,
-    });
+    };
+
+    const createSession = (
+      methods: Stripe.Checkout.SessionCreateParams.PaymentMethodType[]
+    ) =>
+      stripe.checkout.sessions.create({
+        ...baseParams,
+        payment_method_types: methods,
+        ...(methods.includes("pix")
+          ? { payment_method_options: { pix: { expires_after_seconds: 3600 } } }
+          : {}),
+      });
+
+    let session: Stripe.Checkout.Session;
+    try {
+      session = await createSession(paymentMethodTypes);
+    } catch (err) {
+      // Keep card donations working if Pix is not yet activated in the Stripe Dashboard.
+      const pixRejected =
+        paymentMethodTypes.includes("pix") &&
+        err instanceof Stripe.errors.StripeInvalidRequestError &&
+        (err.param?.startsWith("payment_method") ||
+          /pix/i.test(err.message));
+      if (!pixRejected) throw err;
+      console.warn(
+        "[Stripe Checkout] Pix rejected by Stripe, falling back to card only:",
+        err.message
+      );
+      session = await createSession(["card"]);
+    }
 
     // Record donation directly in Supabase (no webhooks required)
     await createDonationRecord({
