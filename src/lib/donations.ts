@@ -134,6 +134,7 @@ export async function updateDonationBySessionOrId(params: {
   status?: DonationStatus;
   donorName?: string | null;
   donorEmail?: string | null;
+  paymentMethod?: DonationRecord["paymentMethod"];
   notes?: string | null;
 }): Promise<DonationRecord | null> {
   const now = new Date().toISOString();
@@ -148,6 +149,7 @@ export async function updateDonationBySessionOrId(params: {
       patch.stripe_subscription_id = params.stripeSubscriptionId;
     if (params.donorName !== undefined) patch.donor_name = params.donorName;
     if (params.donorEmail !== undefined) patch.donor_email = params.donorEmail;
+    if (params.paymentMethod) patch.payment_method = params.paymentMethod;
     if (params.notes !== undefined) patch.notes = params.notes;
 
     const query = supabase.from("donations").update(patch);
@@ -181,6 +183,7 @@ export async function updateDonationBySessionOrId(params: {
     ...(params.donorEmail !== undefined
       ? { donorEmail: params.donorEmail }
       : {}),
+    ...(params.paymentMethod ? { paymentMethod: params.paymentMethod } : {}),
     ...(params.notes !== undefined ? { notes: params.notes } : {}),
     updatedAt: now,
   };
