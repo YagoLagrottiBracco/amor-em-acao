@@ -24,4 +24,6 @@ export const PROJECT_LABELS: Record<string, string> = {
   alimentacao: "Alimentação e Higiene Infantil",
   oficinas: "Oficinas, Educação e Cultura",
   geral: "Fundo Geral — Onde for mais urgente",
+  nordeste: "Ações no Nordeste (Maranhão)",
+  internacional: "Ações na África",
 };

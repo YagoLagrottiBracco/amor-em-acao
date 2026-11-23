@@ -9,7 +9,7 @@ const PROJECT_NAMES: Record<string, string> = {
   oficinas: "Oficinas, Educação e Cultura",
   geral: "Fundo Geral · Onde for mais urgente",
   nordeste: "Ações no Nordeste · Matões do Norte/MA",
-  internacional: "Atuação Internacional",
+  internacional: "Ações na África",
 };
 
 export async function POST(request: NextRequest) {

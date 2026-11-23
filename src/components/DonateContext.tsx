@@ -27,11 +27,12 @@ export function useDonate() {
 
 const PRESET_AMOUNTS = [25, 50, 100, 200, 500];
 
+// The "internacional" id is kept for backward compatibility with stored donations.
 const PROJECTS = [
-  { id: "casa-amarela", label: "Casa Amarela · Jardim Gramacho/RJ" },
   { id: "geral", label: "Onde for mais urgente (Fundo Geral)" },
+  { id: "casa-amarela", label: "Casa Amarela · Jardim Gramacho/RJ" },
   { id: "nordeste", label: "Ações no Nordeste · Maranhão" },
-  { id: "internacional", label: "Atuação Internacional" },
+  { id: "internacional", label: "Ações na África" },
 ];
 
 export function DonateProvider({ children }: { children: React.ReactNode }) {
@@ -41,7 +42,7 @@ export function DonateProvider({ children }: { children: React.ReactNode }) {
   const [frequency, setFrequency] = useState<"payment" | "subscription">(
     "payment"
   );
-  const [project, setProject] = useState<string>("casa-amarela");
+  const [project, setProject] = useState<string>("geral");
   const [donorName, setDonorName] = useState<string>("");
   const [donorEmail, setDonorEmail] = useState<string>("");
   const [loading, setLoading] = useState(false);
