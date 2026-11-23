@@ -28,9 +28,24 @@ export default async function DoacaoSucessoPage({
     if (secretKey && !secretKey.includes("sua_chave_secreta_aqui")) {
       try {
         const stripe = new Stripe(secretKey);
-        const session = await stripe.checkout.sessions.retrieve(sessionId);
+        const session = await stripe.checkout.sessions.retrieve(sessionId, {
+          expand: ["payment_intent.payment_method"],
+        });
+        // A completed session can still be unpaid for async methods (e.g. Pix),
+        // so rely on payment_status only.
         const isPaid =
-          session.payment_status === "paid" || session.status === "complete";
+          session.payment_status === "paid" ||
+          session.payment_status === "no_payment_required";
+
+        const paymentIntent =
+          typeof session.payment_intent === "object"
+            ? session.payment_intent
+            : null;
+        const paymentMethod =
+          paymentIntent && typeof paymentIntent.payment_method === "object"
+            ? paymentIntent.payment_method
+            : null;
+        const paidWithPix = paymentMethod?.type === "pix";
 
         if (session.mode === "subscription") {
           isSubscription = true;
@@ -60,6 +75,7 @@ export default async function DoacaoSucessoPage({
           status: isPaid ? "paid" : "pending",
           donorName: session.customer_details?.name || undefined,
           donorEmail: session.customer_details?.email || undefined,
+          paymentMethod: paidWithPix ? "pix" : undefined,
         });
       } catch {
         // Proceed normally if session is in test mode or already verified
