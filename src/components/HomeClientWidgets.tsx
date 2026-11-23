@@ -11,7 +11,7 @@ export function HeroButtons() {
     <div className="flex flex-wrap gap-3 mt-8">
       <button
         type="button"
-        onClick={() => openDonateModal(50, "casa-amarela")}
+        onClick={() => openDonateModal(50, "geral")}
         className="gradient-brand px-7 py-4 rounded-xl font-extrabold shadow-lg hover:-translate-y-1 transition cursor-pointer"
       >
         <i className="fa-solid fa-heart mr-2" />
@@ -96,7 +96,7 @@ export function ImpactCalculator() {
 
       <button
         type="button"
-        onClick={() => openDonateModal(amount, "casa-amarela")}
+        onClick={() => openDonateModal(amount, "geral")}
         className="w-full gradient-brand text-white font-extrabold py-3.5 rounded-xl mt-6 shadow-md hover:shadow-lg transition cursor-pointer"
       >
         <i className="fa-solid fa-heart mr-2" />
