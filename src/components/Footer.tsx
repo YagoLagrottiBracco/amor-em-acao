@@ -37,7 +37,7 @@ export function Footer() {
                   href="/acoes/atuacao-internacional"
                   className="hover:text-orange-300 transition"
                 >
-                  Atuação internacional
+                  Ações na África
                 </Link>
               </li>
               <li>

@@ -224,7 +224,7 @@ export default function SobrePage() {
             <div className="p-6 rounded-2xl bg-[#fffaf5] border border-orange-100">
               <h4 className="font-extrabold text-stone-900 text-lg flex items-center gap-2">
                 <i className="fa-solid fa-earth-africa text-emerald-600" />
-                Internacional (Malawi)
+                Ações na África (Malawi)
               </h4>
               <p className="text-sm text-stone-600 mt-2 leading-relaxed">
                 Projetos humanitários de perfuração de poços artesianos de água

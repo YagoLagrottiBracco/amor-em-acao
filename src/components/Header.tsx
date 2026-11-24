@@ -10,7 +10,7 @@ const INITIAL_NAV_ACTIONS: ActionNavSummary[] = [
   {
     id: "action-atuacao-internacional",
     slug: "atuacao-internacional",
-    title: "Atuação internacional",
+    title: "Ações na África",
     navSubtitle: "Água e educação no Malawi",
     coverImage: "/images/malawi-acesso-agua-poco.jpg",
     createdAt: "2024-01-03T12:00:00.000Z",
