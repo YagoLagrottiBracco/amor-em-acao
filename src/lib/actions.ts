@@ -246,7 +246,7 @@ export const DEFAULT_ACTION_MISSIONS: ActionMission[] = [
   {
     id: "action-atuacao-internacional",
     slug: "atuacao-internacional",
-    title: "Atuação internacional",
+    title: "Ações na África",
     navSubtitle: "Água e educação no Malawi",
     kicker: "Informação em apuração",
     description:
@@ -257,7 +257,7 @@ export const DEFAULT_ACTION_MISSIONS: ActionMission[] = [
     featuredInNav: true,
     createdAt: "2024-01-03T12:00:00.000Z",
     updatedAt: "2024-01-03T12:00:00.000Z",
-    seoTitle: "Atuação Internacional — Registros no Malawi | Amor em Ação",
+    seoTitle: "Ações na África — Registros no Malawi | Amor em Ação",
     seoDescription:
       "Registros históricos de ações comunitárias, construção de salas de aula e acesso à água no Malawi.",
     blocks: [
@@ -265,7 +265,7 @@ export const DEFAULT_ACTION_MISSIONS: ActionMission[] = [
         id: "hero-mw",
         type: "hero",
         kicker: "Informação em apuração",
-        title: "Atuação internacional",
+        title: "Ações na África",
         subtitle:
           "Registros históricos de ações humanitárias e comunitárias no continente africano, com foco em água potável e educação.",
         primaryButtonText: "Conhecer projetos",
